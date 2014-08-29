@@ -40,8 +40,8 @@ Partial Class Calendar
         Me.Fr = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Sa = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ButtonNext = New System.Windows.Forms.Button()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox_year = New System.Windows.Forms.ComboBox()
+        Me.ComboBox_month = New System.Windows.Forms.ComboBox()
         Me.ButtonPre = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -186,25 +186,24 @@ Partial Class Calendar
         Me.ButtonNext.Text = "Next"
         Me.ButtonNext.UseVisualStyleBackColor = False
         '
-        'ComboBox1
+        'ComboBox_year
         '
-        Me.ComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(108, 5)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(51, 20)
-        Me.ComboBox1.TabIndex = 3
-        Me.ComboBox1.Text = "2014"
+        Me.ComboBox_year.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ComboBox_year.FormattingEnabled = True
+        Me.ComboBox_year.Location = New System.Drawing.Point(108, 5)
+        Me.ComboBox_year.Name = "ComboBox_year"
+        Me.ComboBox_year.Size = New System.Drawing.Size(51, 20)
+        Me.ComboBox_year.TabIndex = 3
         '
-        'ComboBox2
+        'ComboBox_month
         '
-        Me.ComboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Location = New System.Drawing.Point(186, 5)
-        Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(40, 20)
-        Me.ComboBox2.TabIndex = 4
-        Me.ComboBox2.Text = "03"
+        Me.ComboBox_month.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ComboBox_month.FormattingEnabled = True
+        Me.ComboBox_month.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
+        Me.ComboBox_month.Location = New System.Drawing.Point(186, 5)
+        Me.ComboBox_month.Name = "ComboBox_month"
+        Me.ComboBox_month.Size = New System.Drawing.Size(40, 20)
+        Me.ComboBox_month.TabIndex = 4
         '
         'ButtonPre
         '
@@ -244,8 +243,8 @@ Partial Class Calendar
         Me.ClientSize = New System.Drawing.Size(357, 357)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.ComboBox2)
-        Me.Controls.Add(Me.ComboBox1)
+        Me.Controls.Add(Me.ComboBox_month)
+        Me.Controls.Add(Me.ComboBox_year)
         Me.Controls.Add(Me.ButtonNext)
         Me.Controls.Add(Me.ButtonPre)
         Me.Controls.Add(Me.DataGridView1)
@@ -269,8 +268,8 @@ Partial Class Calendar
     Friend WithEvents Sa As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ButtonPre As System.Windows.Forms.Button
     Friend WithEvents ButtonNext As System.Windows.Forms.Button
-    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
-    Friend WithEvents ComboBox2 As System.Windows.Forms.ComboBox
+    Friend WithEvents ComboBox_year As System.Windows.Forms.ComboBox
+    Friend WithEvents ComboBox_month As System.Windows.Forms.ComboBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
 

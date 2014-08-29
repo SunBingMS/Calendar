@@ -3,15 +3,34 @@
     'Window Load処理
     Private Sub Calendar_Load(sender As Object, e As EventArgs) Handles Me.Load
         DataGridView1.RowTemplate.Height = 50
+        YearComboBox_Initial()
 
-        DataGridView1.Rows.Add("-", "-", "-", "-", "-", "-", "-")
-        DataGridView1.Rows.Add("-", "-", "-", "-", "-", "-", "-")
-        DataGridView1.Rows.Add("-", "-", "-", "-", "-", "-", "-")
-        DataGridView1.Rows.Add("-", "-", "-", "-", "-", "-", "-")
-        DataGridView1.Rows.Add("-", "-", "-", "-", "-", "-", "-")
-        DataGridView1.Rows.Add("-", "-", "-", "-", "-", "-", "-")
+        For i = 1 To 6
+            DataGridView1.Rows.Add("-", "-", "-", "-", "-", "-", "-")
+        Next
+        Dim currentDate As Date = Now
+        YearComboBox_Update(currentDate.Year)
+        MonthComboBox_Update(currentDate.Month)
+        Calendar_Update(currentDate.Year, currentDate.Month, currentDate.Day)
+    End Sub
 
-        Calendar_Update(2014, 8, 29)
+    '年のComboBox内容の初期化
+    Private Sub YearComboBox_Initial()
+        ComboBox_year.Items.Clear()
+
+        For i = 1000 To 3000
+            ComboBox_year.Items.Add(i)
+        Next
+    End Sub
+
+    '年ComboBoxの設定
+    Private Sub YearComboBox_Update(year As Integer)
+        ComboBox_year.SelectedText = year
+    End Sub
+
+    '月ComboBoxの設定
+    Private Sub MonthComboBox_Update(month As Integer)
+        ComboBox_month.SelectedText = month
     End Sub
 
     'DataGridView更新処理
