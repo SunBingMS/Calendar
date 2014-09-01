@@ -227,4 +227,15 @@
         'カレンダー更新
         Calendar_Update(currentDate.Year, currentDate.Month, currentDate.Day)
     End Sub
+
+    'カレンダーのダブルクリックイベント
+    Private Sub DataGridView1_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentDoubleClick
+        If DataGridView1.SelectedCells.Item(0).Style.ForeColor = Color.Gray Then
+            If DataGridView1.SelectedCells.Item(0).RowIndex >= 4 Then
+                ButtonNext_Click(sender, New System.EventArgs())
+            Else
+                ButtonPre_Click(sender, New System.EventArgs())
+            End If
+        End If
+    End Sub
 End Class
