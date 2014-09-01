@@ -123,6 +123,9 @@
 
         '一日の曜日算出
         Dim monthStartWeek As Integer = Weekday(Str(year) + "-" + Str(month) + "-1")
+        If monthStartWeek = 1 Then
+            monthStartWeek = 8
+        End If
 
         'カレンダーへ出力
         For i = 1 To daysOfMonth
