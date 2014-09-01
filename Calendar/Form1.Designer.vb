@@ -45,6 +45,7 @@ Partial Class Calendar
         Me.ButtonPre = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.ButtonToday = New System.Windows.Forms.Button()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -190,7 +191,7 @@ Partial Class Calendar
         '
         Me.ComboBox_year.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ComboBox_year.FormattingEnabled = True
-        Me.ComboBox_year.Location = New System.Drawing.Point(108, 5)
+        Me.ComboBox_year.Location = New System.Drawing.Point(80, 5)
         Me.ComboBox_year.Name = "ComboBox_year"
         Me.ComboBox_year.Size = New System.Drawing.Size(51, 20)
         Me.ComboBox_year.TabIndex = 3
@@ -199,8 +200,7 @@ Partial Class Calendar
         '
         Me.ComboBox_month.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ComboBox_month.FormattingEnabled = True
-        Me.ComboBox_month.Items.AddRange(New Object() {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"})
-        Me.ComboBox_month.Location = New System.Drawing.Point(186, 5)
+        Me.ComboBox_month.Location = New System.Drawing.Point(158, 5)
         Me.ComboBox_month.Name = "ComboBox_month"
         Me.ComboBox_month.Size = New System.Drawing.Size(40, 20)
         Me.ComboBox_month.TabIndex = 4
@@ -221,7 +221,7 @@ Partial Class Calendar
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(163, 9)
+        Me.Label1.Location = New System.Drawing.Point(135, 9)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(17, 12)
         Me.Label1.TabIndex = 5
@@ -230,17 +230,29 @@ Partial Class Calendar
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(229, 9)
+        Me.Label2.Location = New System.Drawing.Point(201, 9)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(17, 12)
         Me.Label2.TabIndex = 6
         Me.Label2.Text = "月"
+        '
+        'ButtonToday
+        '
+        Me.ButtonToday.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.ButtonToday.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonToday.Location = New System.Drawing.Point(224, 5)
+        Me.ButtonToday.Name = "ButtonToday"
+        Me.ButtonToday.Size = New System.Drawing.Size(50, 20)
+        Me.ButtonToday.TabIndex = 7
+        Me.ButtonToday.Text = "Today"
+        Me.ButtonToday.UseVisualStyleBackColor = False
         '
         'Calendar
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(357, 357)
+        Me.Controls.Add(Me.ButtonToday)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.ComboBox_month)
@@ -272,5 +284,6 @@ Partial Class Calendar
     Friend WithEvents ComboBox_month As System.Windows.Forms.ComboBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents ButtonToday As System.Windows.Forms.Button
 
 End Class
