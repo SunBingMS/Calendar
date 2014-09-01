@@ -229,7 +229,7 @@
     End Sub
 
     'カレンダーのダブルクリックイベント
-    Private Sub DataGridView1_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentDoubleClick
+    Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
         If DataGridView1.SelectedCells.Item(0).Style.ForeColor = Color.Gray Then
             If DataGridView1.SelectedCells.Item(0).RowIndex >= 4 Then
                 ButtonNext_Click(sender, New System.EventArgs())
