@@ -3,6 +3,8 @@
     'ComboBoxの有効性フラグ
     Private isReady As Boolean = False
 
+#Region "Load"
+
     'Window Load処理
     Private Sub Calendar_Load(sender As Object, e As EventArgs) Handles Me.Load
         'カレンダーセルのサイズ設定
@@ -20,6 +22,10 @@
         'ComboBox有効にする
         isReady = True
     End Sub
+
+#End Region
+    
+#Region "ComboBox"
 
     '年のComboBox中身の初期化
     Private Sub YearComboBox_Initial()
@@ -65,6 +71,10 @@
         ComboBox_month.SelectedValue = month
     End Sub
 
+#End Region
+    
+#Region "Function"
+
     '月の日数算出
     Private Function DaysOfMonthCount(ByVal year As Integer, ByVal month As Integer) As Integer
         Dim daysOfMonth As Integer = 0
@@ -77,12 +87,16 @@
         Return daysOfMonth
     End Function
 
+#End Region
+
+#Region "GridView"
+
     'DataGridView更新処理
     Private Sub Calendar_Update(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
         '全セルのスタイル設定
         For x = 0 To 6
             For y = 0 To 5
-                DataGridView1.Item(x, y).Value = "-"   
+                DataGridView1.Item(x, y).Value = "-"
                 If x = 0 Then
                     DataGridView1.Item(x, y).Style.ForeColor = Color.Red
                     DataGridView1.Item(x, y).Style.BackColor = Color.FromArgb(255, 240, 240)
@@ -133,22 +147,46 @@
         Next
     End Sub
 
+    'カレンダーのダブルクリックイベント
+    Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
+        If DataGridView1.SelectedCells.Item(0).Style.ForeColor = Color.Gray Then
+            If DataGridView1.SelectedCells.Item(0).RowIndex >= 4 Then
+                ButtonNext_Click(sender, New System.EventArgs())
+            Else
+                ButtonPre_Click(sender, New System.EventArgs())
+            End If
+        End If
+    End Sub
+
+#End Region
+    
+#Region "ComboBox Event"
+
     '年ComboBoxのテキスト入力イベント
     Private Sub ComboBox_year_KeyDown(sender As Object, e As KeyEventArgs) Handles ComboBox_year.KeyDown
         If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
-            Dim inputYear As Integer = 0
-            If Integer.TryParse(ComboBox_year.Text, inputYear) Then
-                inputYear = ComboBox_year.Text
-                If inputYear >= 1000 And inputYear <= 3000 Then
-                    ComboBox_year.SelectedValue = inputYear
-                    Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
-                    Return
-                End If
-            End If
-            MsgBox("Please check your input.")
-            '今日の日付表示
-            ButtonToday_Click(sender, New System.EventArgs())
+            ComboBox_year_Check(sender)
         End If
+    End Sub
+
+    '年ComboBoxテキストチェック処理
+    Private Sub ComboBox_year_Check(sender As Object)
+        Dim inputYear As Integer = 0
+        If Integer.TryParse(ComboBox_year.Text, inputYear) Then
+            inputYear = ComboBox_year.Text
+            If inputYear >= 1000 And inputYear <= 3000 Then
+                ComboBox_year.SelectedValue = inputYear
+                Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
+                Return
+            End If
+        End If
+        MsgBox("入力をチェックしてください。")
+        '今日の日付表示
+        ButtonToday_Click(sender, New System.EventArgs())
+    End Sub
+
+    Private Sub ComboBox_year_LostFocus(sender As Object, e As EventArgs) Handles ComboBox_year.LostFocus
+        ComboBox_year_Check(sender)
     End Sub
 
     '年ComboBoxの選択イベント
@@ -162,21 +200,32 @@
         Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
     End Sub
 
+    '月ComboBoxのテキスト入力イベント
     Private Sub ComboBox_month_KeyDown(sender As Object, e As KeyEventArgs) Handles ComboBox_month.KeyDown
         If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
-            Dim inputMonth As Integer = 0
-            If Integer.TryParse(ComboBox_month.Text, inputMonth) Then
-                inputMonth = ComboBox_month.Text
-                If inputMonth >= 1 And inputMonth <= 12 Then
-                    ComboBox_month.SelectedValue = inputMonth
-                    Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
-                    Return
-                End If
-            End If
-            MsgBox("Please check your input.")
-            '今日の日付表示
-            ButtonToday_Click(sender, New System.EventArgs())
+            ComboBox_month_Check(sender)
         End If
+    End Sub
+
+    '月ComboBoxテキストチェック処理
+    Private Sub ComboBox_month_Check(sender As Object)
+        Dim inputMonth As Integer = 0
+        If Integer.TryParse(ComboBox_month.Text, inputMonth) Then
+            inputMonth = ComboBox_month.Text
+            If inputMonth >= 1 And inputMonth <= 12 Then
+                ComboBox_month.SelectedValue = inputMonth
+                Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
+                Return
+            End If
+        End If
+        MsgBox("入力をチェックしてください。")
+        '今日の日付表示
+        ButtonToday_Click(sender, New System.EventArgs())
+    End Sub
+
+    '月ComboBox
+    Private Sub ComboBox_month_LostFocus(sender As Object, e As EventArgs) Handles ComboBox_month.LostFocus
+        ComboBox_month_Check(sender)
     End Sub
 
     '月ComboBoxの選択イベント
@@ -189,6 +238,10 @@
         'カレンダー更新
         Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
     End Sub
+
+#End Region
+
+#Region "Button Event"
 
     '前月ボタンイベント
     Private Sub ButtonPre_Click(sender As Object, e As EventArgs) Handles ButtonPre.Click
@@ -228,14 +281,6 @@
         Calendar_Update(currentDate.Year, currentDate.Month, currentDate.Day)
     End Sub
 
-    'カレンダーのダブルクリックイベント
-    Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
-        If DataGridView1.SelectedCells.Item(0).Style.ForeColor = Color.Gray Then
-            If DataGridView1.SelectedCells.Item(0).RowIndex >= 4 Then
-                ButtonNext_Click(sender, New System.EventArgs())
-            Else
-                ButtonPre_Click(sender, New System.EventArgs())
-            End If
-        End If
-    End Sub
+#End Region
+
 End Class
