@@ -15,12 +15,8 @@
             DataGridView1.Rows.Add("-", "-", "-", "-", "-", "-", "-")
         Next
 
-        '年月ComboBoxのデフォールト値設定
-        Dim currentDate As Date = Now
-        YearComboBox_Update(currentDate.Year)
-        MonthComboBox_Update(currentDate.Month)
-        'カレンダー更新
-        Calendar_Update(currentDate.Year, currentDate.Month, currentDate.Day)
+        '今日の日付表示
+        ButtonToday_Click(sender, New System.EventArgs())
         'ComboBox有効にする
         isReady = True
     End Sub
@@ -130,6 +126,22 @@
 
     End Sub
 
+    Private Sub ComboBox_year_KeyDown(sender As Object, e As KeyEventArgs) Handles ComboBox_year.KeyDown 
+        If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
+            Dim inputYear As Integer = 0
+            If Integer.TryParse(ComboBox_year.Text, inputYear) Then
+                inputYear = ComboBox_year.Text
+                If inputYear >= 1000 And inputYear <= 3000 Then
+                    Calendar_Update(ComboBox_year.Text, ComboBox_month.SelectedValue, 1)
+                    Return
+                End If
+            End If
+            MsgBox("Please check your input.")
+            '今日の日付表示
+            ButtonToday_Click(sender, New System.EventArgs())
+        End If
+    End Sub
+
     '年ComboBoxの選択イベント
     Private Sub ComboBox_year_SelectedValueChanged(sender As Object, e As EventArgs) Handles ComboBox_year.SelectedValueChanged
         'ComboBox有効性フラグチェック
@@ -138,7 +150,7 @@
         End If
 
         'カレンダー更新
-        Calendar_Update(ComboBox_year.Text, ComboBox_month.Text, 1)
+        Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
     End Sub
 
     '月ComboBoxの選択イベント
@@ -149,17 +161,44 @@
         End If
 
         'カレンダー更新
-        Calendar_Update(ComboBox_year.Text, ComboBox_month.Text, 1)
+        Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
     End Sub
 
     '前月ボタンイベント
     Private Sub ButtonPre_Click(sender As Object, e As EventArgs) Handles ButtonPre.Click
         If ComboBox_month.SelectedIndex <= 0 Then
             ComboBox_month.SelectedIndex = ComboBox_month.Items.Count - 1
+            If ComboBox_year.SelectedIndex <= 0 Then
+                ComboBox_year.SelectedIndex = ComboBox_year.Items.Count - 1
+            Else
+                ComboBox_year.SelectedIndex = ComboBox_year.SelectedIndex - 1
+            End If
         Else
             ComboBox_month.SelectedIndex = ComboBox_month.SelectedIndex - 1
         End If
+    End Sub
 
+    '次月ボタンイベント
+    Private Sub ButtonNext_Click(sender As Object, e As EventArgs) Handles ButtonNext.Click
+        If ComboBox_month.SelectedIndex >= ComboBox_month.Items.Count - 1 Then
+            ComboBox_month.SelectedIndex = 0
+            If ComboBox_year.SelectedIndex >= ComboBox_year.Items.Count - 1 Then
+                ComboBox_year.SelectedIndex = 0
+            Else
+                ComboBox_year.SelectedIndex = ComboBox_year.SelectedIndex * 1
+            End If
+        Else
+            ComboBox_month.SelectedIndex = ComboBox_month.SelectedIndex + 1
+        End If
+    End Sub
 
+    '今日ボタンイベント
+    Private Sub ButtonToday_Click(sender As Object, e As EventArgs) Handles ButtonToday.Click
+        '年月ComboBoxのデフォールト値設定
+        Dim currentDate As Date = Now
+        YearComboBox_Update(currentDate.Year)
+        MonthComboBox_Update(currentDate.Month)
+        'カレンダー更新
+        Calendar_Update(currentDate.Year, currentDate.Month, currentDate.Day)
     End Sub
 End Class
