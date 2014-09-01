@@ -158,6 +158,14 @@
         End If
     End Sub
 
+    'Enterボタンの時Tabと同じにする
+    Private Sub DataGridView1_KeyDown(sender As Object, e As KeyEventArgs) Handles DataGridView1.KeyDown
+        If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
+            e.Handled = True
+            SendKeys.Send("{TAB}")
+        End If
+    End Sub
+
 #End Region
     
 #Region "ComboBox Event"
