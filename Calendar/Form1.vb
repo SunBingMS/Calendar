@@ -185,6 +185,17 @@
         ButtonToday_Click(sender, New System.EventArgs())
     End Sub
 
+    '年ComboBoxの入力制限
+    Private Sub ComboBox_year_KeyPress(sender As Object, e As KeyPressEventArgs) Handles ComboBox_year.KeyPress
+        Dim currentKey As Integer = Convert.ToInt32(e.KeyChar)
+        '0~9 と BackSpace以外の入力禁止
+        If currentKey >= 48 And currentKey <= 57 Or currentKey = 8 Then
+            Return
+        Else
+            e.Handled = True
+        End If
+    End Sub
+
     Private Sub ComboBox_year_LostFocus(sender As Object, e As EventArgs) Handles ComboBox_year.LostFocus
         ComboBox_year_Check(sender)
     End Sub
@@ -221,6 +232,17 @@
         MsgBox("入力をチェックしてください。")
         '今日の日付表示
         ButtonToday_Click(sender, New System.EventArgs())
+    End Sub
+
+    '月ComboBoxの入力制限
+    Private Sub ComboBox_month_KeyPress(sender As Object, e As KeyPressEventArgs) Handles ComboBox_month.KeyPress
+        Dim currentKey As Integer = Convert.ToInt32(e.KeyChar)
+        '0~9 と BackSpace以外の入力禁止
+        If currentKey >= 48 And currentKey <= 57 Or currentKey = 8 Then
+            Return
+        Else
+            e.Handled = True
+        End If
     End Sub
 
     '月ComboBox
