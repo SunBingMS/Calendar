@@ -65,23 +65,47 @@
         ComboBox_month.SelectedValue = month
     End Sub
 
-    'DataGridView更新処理
-    Private Sub Calendar_Update(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
-        '----------------------
-        For x = 0 To 6
-            For y = 0 To 5
-                DataGridView1.Item(x, y).Value = "-"
-            Next
-        Next
-        '----------------------
-
-        '当該月の日数算出
+    '月の日数算出
+    Private Function DaysOfMonthCount(ByVal year As Integer, ByVal month As Integer) As Integer
         Dim daysOfMonth As Integer = 0
         If month < 12 Then
             daysOfMonth = DateDiff("d", Str(year) + "-" & Str(month) + "-1", Str(year) + "-" + Str(month + 1) & "-1")
         Else
             daysOfMonth = DateDiff("d", Str(year) + "-" & Str(month) + "-1", Str(year + 1) + "-" + Str((month + 1) Mod 12) & "-1")
         End If
+
+        Return daysOfMonth
+    End Function
+
+    'DataGridView更新処理
+    Private Sub Calendar_Update(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
+        '全セルのスタイル設定
+        For x = 0 To 6
+            For y = 0 To 5
+                DataGridView1.Item(x, y).Value = "-"   
+                If x = 0 Then
+                    DataGridView1.Item(x, y).Style.ForeColor = Color.Red
+                    DataGridView1.Item(x, y).Style.BackColor = Color.FromArgb(255, 240, 240)
+                ElseIf x = 6 Then
+                    DataGridView1.Item(x, y).Style.ForeColor = Color.Blue
+                    DataGridView1.Item(x, y).Style.BackColor = Color.FromArgb(240, 240, 255)
+                Else
+                    DataGridView1.Item(x, y).Style.ForeColor = Color.Black
+                    DataGridView1.Item(x, y).Style.BackColor = Color.White
+                End If
+            Next
+        Next
+
+        '当該月の日数算出
+        Dim daysOfMonth As Integer = DaysOfMonthCount(year, month)
+        '前月の日数算出
+        Dim preYear As Integer = year
+        Dim preMonth As Integer = month - 1
+        If preMonth <= 0 Then
+            preMonth = 12
+            preYear = year - 1
+        End If
+        Dim daysOfPreMonth As Integer = DaysOfMonthCount(preYear, preMonth)
 
         '一日の曜日算出
         Dim monthStartWeek As Integer = Weekday(Str(year) + "-" + Str(month) + "-1")
@@ -94,45 +118,30 @@
             DataGridView1.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Value = i
         Next
 
-        'Select Case monthStartWeek
-        '    Case 1
-        '        For i = 1 To daysOfMonth
-        '            DataGridView1.Item((i - 1) Mod 7, i - 2 + monthStartWeek).Value = i
-        '        Next
+        '前月のカレンダーへ出力
+        For i = 0 To monthStartWeek - 2
+            DataGridView1.Item(i, 0).Style.ForeColor = Color.Gray
+            DataGridView1.Item(i, 0).Style.BackColor = Color.FromArgb(240, 240, 240)
+            DataGridView1.Item(i, 0).Value = daysOfPreMonth - monthStartWeek + 2 + i
+        Next
 
-        '    Case 2
-        '        For i = 1 To daysOfMonth
-        '            DataGridView1.Item((i - 1) Mod 7, i).Value = i
-        '        Next
-
-        '    Case 3
-        '        For i = 1 To daysOfMonth
-        '            DataGridView1.Item((i - 1) Mod 7, i + 1).Value = i
-        '        Next
-
-        '    Case 4
-
-
-        '    Case 5
-
-
-        '    Case 6
-
-
-        '    Case 7
-
-        'End Select
-
-
+        '次月のカレンダーへ出力
+        For i = monthStartWeek + daysOfMonth To 6 * 7
+            DataGridView1.Item((i - 1) Mod 7, (i - 1) \ 7).Style.ForeColor = Color.Gray
+            DataGridView1.Item((i - 1) Mod 7, (i - 1) \ 7).Style.BackColor = Color.FromArgb(240, 240, 240)
+            DataGridView1.Item((i - 1) Mod 7, (i - 1) \ 7).Value = i - monthStartWeek - daysOfMonth + 1
+        Next
     End Sub
 
-    Private Sub ComboBox_year_KeyDown(sender As Object, e As KeyEventArgs) Handles ComboBox_year.KeyDown 
+    '年ComboBoxのテキスト入力イベント
+    Private Sub ComboBox_year_KeyDown(sender As Object, e As KeyEventArgs) Handles ComboBox_year.KeyDown
         If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
             Dim inputYear As Integer = 0
             If Integer.TryParse(ComboBox_year.Text, inputYear) Then
                 inputYear = ComboBox_year.Text
                 If inputYear >= 1000 And inputYear <= 3000 Then
-                    Calendar_Update(ComboBox_year.Text, ComboBox_month.SelectedValue, 1)
+                    ComboBox_year.SelectedValue = inputYear
+                    Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
                     Return
                 End If
             End If
@@ -151,6 +160,23 @@
 
         'カレンダー更新
         Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
+    End Sub
+
+    Private Sub ComboBox_month_KeyDown(sender As Object, e As KeyEventArgs) Handles ComboBox_month.KeyDown
+        If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
+            Dim inputMonth As Integer = 0
+            If Integer.TryParse(ComboBox_month.Text, inputMonth) Then
+                inputMonth = ComboBox_month.Text
+                If inputMonth >= 1 And inputMonth <= 12 Then
+                    ComboBox_month.SelectedValue = inputMonth
+                    Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
+                    Return
+                End If
+            End If
+            MsgBox("Please check your input.")
+            '今日の日付表示
+            ButtonToday_Click(sender, New System.EventArgs())
+        End If
     End Sub
 
     '月ComboBoxの選択イベント
