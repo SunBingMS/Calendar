@@ -201,9 +201,11 @@
                 Return
             End If
         End If
-        MsgBox("入力をチェックしてください。")
+        MsgBox("入力した年をチェックしてください。")
         '今日の日付表示
-        ButtonToday_Click(sender, New System.EventArgs())
+        Dim currentDate As Date = Now
+        YearComboBox_Update(currentDate.Year)
+        ComboBox_year.Select()
     End Sub
 
     '年ComboBoxの入力制限
@@ -217,7 +219,7 @@
         End If
     End Sub
 
-    Private Sub ComboBox_year_LostFocus(sender As Object, e As EventArgs) Handles ComboBox_year.LostFocus
+    Private Sub ComboBox_year_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ComboBox_year.Validating
         ComboBox_year_Check(sender)
     End Sub
 
@@ -250,9 +252,11 @@
                 Return
             End If
         End If
-        MsgBox("入力をチェックしてください。")
+        MsgBox("入力した月をチェックしてください。")
         '今日の日付表示
-        ButtonToday_Click(sender, New System.EventArgs())
+        Dim currentDate As Date = Now
+        MonthComboBox_Update(currentDate.Month)
+        ComboBox_month.Select()
     End Sub
 
     '月ComboBoxの入力制限
@@ -267,7 +271,7 @@
     End Sub
 
     '月ComboBox
-    Private Sub ComboBox_month_LostFocus(sender As Object, e As EventArgs) Handles ComboBox_month.LostFocus
+    Private Sub ComboBox_month_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ComboBox_month.Validating
         ComboBox_month_Check(sender)
     End Sub
 
@@ -307,7 +311,7 @@
             If ComboBox_year.SelectedIndex >= ComboBox_year.Items.Count - 1 Then
                 ComboBox_year.SelectedIndex = 0
             Else
-                ComboBox_year.SelectedIndex = ComboBox_year.SelectedIndex * 1
+                ComboBox_year.SelectedIndex = ComboBox_year.SelectedIndex + 1
             End If
         Else
             ComboBox_month.SelectedIndex = ComboBox_month.SelectedIndex + 1
