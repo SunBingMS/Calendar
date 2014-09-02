@@ -153,11 +153,21 @@
     'カレンダーのダブルクリックイベント
     Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
         If DataGridView1.SelectedCells.Item(0).Style.ForeColor = Color.Gray Then
+            Dim tmp As String = DataGridView1.SelectedCells.Item(0).Value
             If DataGridView1.SelectedCells.Item(0).RowIndex >= 4 Then
                 ButtonNext_Click(sender, New System.EventArgs())
             Else
                 ButtonPre_Click(sender, New System.EventArgs())
             End If
+            'セルの選択
+            For x = 0 To 6
+                For y = 0 To 5
+                    If DataGridView1.Item(x, y).Value = tmp And
+                       Not DataGridView1.Item(x, y).Style.ForeColor = Color.Gray Then
+                        DataGridView1.Item(x, y).Selected = True
+                    End If
+                Next
+            Next
         End If
     End Sub
 

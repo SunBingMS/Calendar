@@ -185,7 +185,7 @@ Partial Class Calendar
         Me.ButtonNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonNext.Location = New System.Drawing.Point(308, 5)
         Me.ButtonNext.Name = "ButtonNext"
-        Me.ButtonNext.Size = New System.Drawing.Size(45, 20)
+        Me.ButtonNext.Size = New System.Drawing.Size(45, 22)
         Me.ButtonNext.TabIndex = 2
         Me.ButtonNext.Text = ">>"
         Me.ButtonNext.UseVisualStyleBackColor = False
@@ -193,21 +193,23 @@ Partial Class Calendar
         'ComboBox_year
         '
         Me.ComboBox_year.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ComboBox_year.Font = New System.Drawing.Font("MS UI Gothic", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ComboBox_year.FormattingEnabled = True
-        Me.ComboBox_year.Location = New System.Drawing.Point(80, 5)
+        Me.ComboBox_year.Location = New System.Drawing.Point(80, 6)
         Me.ComboBox_year.MaxLength = 4
         Me.ComboBox_year.Name = "ComboBox_year"
-        Me.ComboBox_year.Size = New System.Drawing.Size(51, 20)
+        Me.ComboBox_year.Size = New System.Drawing.Size(51, 21)
         Me.ComboBox_year.TabIndex = 3
         '
         'ComboBox_month
         '
         Me.ComboBox_month.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ComboBox_month.Font = New System.Drawing.Font("MS UI Gothic", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.ComboBox_month.FormattingEnabled = True
-        Me.ComboBox_month.Location = New System.Drawing.Point(158, 5)
+        Me.ComboBox_month.Location = New System.Drawing.Point(158, 6)
         Me.ComboBox_month.MaxLength = 2
         Me.ComboBox_month.Name = "ComboBox_month"
-        Me.ComboBox_month.Size = New System.Drawing.Size(40, 20)
+        Me.ComboBox_month.Size = New System.Drawing.Size(40, 21)
         Me.ComboBox_month.TabIndex = 4
         '
         'ButtonPre
@@ -219,7 +221,7 @@ Partial Class Calendar
         Me.ButtonPre.ImageAlign = System.Drawing.ContentAlignment.TopCenter
         Me.ButtonPre.Location = New System.Drawing.Point(4, 5)
         Me.ButtonPre.Name = "ButtonPre"
-        Me.ButtonPre.Size = New System.Drawing.Size(45, 20)
+        Me.ButtonPre.Size = New System.Drawing.Size(45, 22)
         Me.ButtonPre.TabIndex = 1
         Me.ButtonPre.Text = "<<"
         Me.ButtonPre.UseVisualStyleBackColor = False
@@ -227,7 +229,7 @@ Partial Class Calendar
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(135, 9)
+        Me.Label1.Location = New System.Drawing.Point(135, 10)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(17, 12)
         Me.Label1.TabIndex = 5
@@ -236,7 +238,7 @@ Partial Class Calendar
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(201, 9)
+        Me.Label2.Location = New System.Drawing.Point(201, 10)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(17, 12)
         Me.Label2.TabIndex = 6
@@ -249,9 +251,9 @@ Partial Class Calendar
         Me.ButtonToday.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonToday.Location = New System.Drawing.Point(224, 5)
         Me.ButtonToday.Name = "ButtonToday"
-        Me.ButtonToday.Size = New System.Drawing.Size(50, 20)
+        Me.ButtonToday.Size = New System.Drawing.Size(50, 22)
         Me.ButtonToday.TabIndex = 7
-        Me.ButtonToday.Text = "Today"
+        Me.ButtonToday.Text = "今日"
         Me.ButtonToday.UseVisualStyleBackColor = False
         '
         'Calendar
