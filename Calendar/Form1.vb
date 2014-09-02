@@ -1,7 +1,14 @@
-﻿Public Class Calendar
+﻿Imports System.Data.OleDb
+
+Public Class Calendar
 
     'ComboBoxの有効性フラグ
     Private isReady As Boolean = False
+
+    ' Connection string for ADO.NET via OleDB
+    Dim cn As OleDbConnection =
+        New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=memo.accdb;")
+    Dim cmd As OleDbCommand
 
 #Region "Load"
 
@@ -24,7 +31,7 @@
     End Sub
 
 #End Region
-    
+
 #Region "ComboBox"
 
     '年のComboBox中身の初期化
@@ -72,7 +79,7 @@
     End Sub
 
 #End Region
-    
+
 #Region "Function"
 
     '月の日数算出
@@ -92,7 +99,7 @@
 #Region "GridView"
 
     'DataGridView更新処理
-    Private Sub Calendar_Update(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
+    Public Sub Calendar_Update(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
         '全セルのスタイル設定
         For x = 0 To 6
             For y = 0 To 5
@@ -128,12 +135,29 @@
         End If
 
         'カレンダーへ出力
+        cn.Open()
+        cmd = New OleDbCommand()
+        cmd.Connection = cn
         For i = 1 To daysOfMonth
             If i = day Then
                 DataGridView1.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Selected = True
             End If
             DataGridView1.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Value = i
+
+            Dim tdate As String = String.Format("{0:0000}", year) & String.Format("{0:00}", month) & String.Format("{0:00}", i)
+            cmd.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & tdate
+            Dim dr As OleDbDataReader = cmd.ExecuteReader
+
+            If dr.HasRows Then
+                dr.Read()
+                If Not dr(0) = "" Then
+
+                    DataGridView1.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Style.BackColor = Color.LightYellow
+                End If
+            End If
+            dr.Close()
         Next
+        cn.Close()
 
         '前月のカレンダーへ出力
         For i = 0 To monthStartWeek - 2
@@ -168,6 +192,9 @@
                     End If
                 Next
             Next
+        Else
+            Dialog1.Initial(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, Integer.Parse(DataGridView1.SelectedCells.Item(0).Value))
+            Dialog1.ShowDialog()
         End If
     End Sub
 
@@ -180,7 +207,7 @@
     End Sub
 
 #End Region
-    
+
 #Region "ComboBox Event"
 
     '年ComboBoxのテキスト入力イベント
