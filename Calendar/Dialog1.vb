@@ -7,15 +7,19 @@ Public Class Dialog1
     Dim cn As OleDbConnection =
         New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=memo.accdb;")
     Dim cmd As OleDbCommand
+    '年月日
     Dim intYear As Integer
     Dim intMonth As Integer
     Dim intDay As Integer
 
+    'ダイアログの初期化
     Public Sub Initial(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
+        '年月日
         intYear = year
         intMonth = month
         intDay = day
 
+        '当日のメモ内容を検索する
         Me.Text = year & "年" & month & "月" & day & "日 -- メモ"
         MemoContent.Text = ""
         cn.Open()
@@ -26,28 +30,35 @@ Public Class Dialog1
         cmd.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & tdate
         Dim dr As OleDbDataReader = cmd.ExecuteReader
 
+        '検索結果があれば
         If dr.HasRows Then
             dr.Read()
+            'メモの表示
             MemoContent.Text = dr(0)
             dr.Close()
         End If
         cn.Close()
     End Sub
 
+    'メモの保存処理
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         cn.Open()
+        '当日の古い内容を削除する
         Dim tdate As String = String.Format("{0:0000}", intYear) & String.Format("{0:00}", intMonth) & String.Format("{0:00}", intDay)
         cmd.CommandText = "DELETE FROM tb_memo WHERE f_date =" & tdate
-        'Dim dr As OleDbDataReader = cmd.ExecuteReader
         cmd.ExecuteNonQuery()
-        cmd.CommandText = "INSERT INTO tb_memo VALUES('" & tdate & "','" & Me.MemoContent.Text & "')"
-        cmd.ExecuteNonQuery()
+        If Not MemoContent.Text = "" Then
+            '当日の新メモを追加する
+            cmd.CommandText = "INSERT INTO tb_memo VALUES('" & tdate & "','" & MemoContent.Text & "')"
+            cmd.ExecuteNonQuery()
+        End If
         cn.Close()
         Calendar.Calendar_Update(intYear, intMonth, intDay)
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
 
+    'キャンセル処理
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
