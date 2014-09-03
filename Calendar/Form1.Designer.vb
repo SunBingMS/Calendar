@@ -186,7 +186,7 @@ Partial Class Calendar
         Me.ButtonNext.Location = New System.Drawing.Point(308, 5)
         Me.ButtonNext.Name = "ButtonNext"
         Me.ButtonNext.Size = New System.Drawing.Size(45, 22)
-        Me.ButtonNext.TabIndex = 2
+        Me.ButtonNext.TabIndex = 7
         Me.ButtonNext.Text = ">>"
         Me.ButtonNext.UseVisualStyleBackColor = False
         '
@@ -199,7 +199,7 @@ Partial Class Calendar
         Me.ComboBox_year.MaxLength = 4
         Me.ComboBox_year.Name = "ComboBox_year"
         Me.ComboBox_year.Size = New System.Drawing.Size(51, 21)
-        Me.ComboBox_year.TabIndex = 3
+        Me.ComboBox_year.TabIndex = 2
         '
         'ComboBox_month
         '
@@ -232,7 +232,7 @@ Partial Class Calendar
         Me.Label1.Location = New System.Drawing.Point(135, 10)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(17, 12)
-        Me.Label1.TabIndex = 5
+        Me.Label1.TabIndex = 3
         Me.Label1.Text = "年"
         '
         'Label2
@@ -241,7 +241,7 @@ Partial Class Calendar
         Me.Label2.Location = New System.Drawing.Point(201, 10)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(17, 12)
-        Me.Label2.TabIndex = 6
+        Me.Label2.TabIndex = 5
         Me.Label2.Text = "月"
         '
         'ButtonToday
@@ -252,7 +252,7 @@ Partial Class Calendar
         Me.ButtonToday.Location = New System.Drawing.Point(224, 5)
         Me.ButtonToday.Name = "ButtonToday"
         Me.ButtonToday.Size = New System.Drawing.Size(50, 22)
-        Me.ButtonToday.TabIndex = 7
+        Me.ButtonToday.TabIndex = 6
         Me.ButtonToday.Text = "今日"
         Me.ButtonToday.UseVisualStyleBackColor = False
         '

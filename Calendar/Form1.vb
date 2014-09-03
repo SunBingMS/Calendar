@@ -249,6 +249,7 @@ Public Class Calendar
         End If
     End Sub
 
+    '年ComboBox
     Private Sub ComboBox_year_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ComboBox_year.Validating
         ComboBox_year_Check(sender)
     End Sub

@@ -24,6 +24,7 @@ Public Class Dialog1
         '当日のメモ内容を検索する
         Me.Text = year & "年" & month & "月" & day & "日 -- メモ"
         MemoContent.Text = ""
+        strMemoDB = ""
         cn.Open()
         cmd = New OleDbCommand()
         cmd.Connection = cn
@@ -36,8 +37,9 @@ Public Class Dialog1
         If dr.HasRows Then
             dr.Read()
             'メモの表示
-            strMemoDB = dr(0)
-            MemoContent.Text = dr(0)
+            strMemoDB = String_Decode(dr(0))
+            MemoContent.Text = strMemoDB
+
             dr.Close()
         End If
         cn.Close()
@@ -52,7 +54,7 @@ Public Class Dialog1
         cmd.ExecuteNonQuery()
         If Not MemoContent.Text = "" Then
             '当日の新メモを追加する
-            cmd.CommandText = "INSERT INTO tb_memo VALUES('" & tdate & "','" & MemoContent.Text & "')"
+            cmd.CommandText = "INSERT INTO tb_memo VALUES('" & tdate & "','" & String_Encode(MemoContent.Text) & "')"
             cmd.ExecuteNonQuery()
         End If
         cn.Close()
@@ -79,5 +81,15 @@ Public Class Dialog1
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub
+
+    'エンコード
+    Private Function String_Encode(input As String) As String
+        Return input.Replace("'", "['']")
+    End Function
+
+    'ディコード
+    Private Function String_Decode(input As String) As String
+        Return input.Replace("[']", "'")
+    End Function
 
 End Class
