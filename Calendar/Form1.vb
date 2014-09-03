@@ -229,13 +229,15 @@ Public Class Calendar
             If inputYear >= 1000 And inputYear <= 3000 Then
                 ComboBox_year.SelectedValue = inputYear
                 Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
+                ComboBox_year.CausesValidation = False
+                ComboBox_month.Select()
+                ComboBox_year.CausesValidation = True
                 Return
             End If
         End If
         MsgBox("入力した年をチェックしてください。")
         '入力前の日付表示
         YearComboBox_Update(lastRightYear)
-        ComboBox_year.Select()
     End Sub
 
     '年ComboBoxの入力制限
@@ -251,7 +253,8 @@ Public Class Calendar
 
     '年ComboBox
     Private Sub ComboBox_year_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ComboBox_year.Validating
-        ComboBox_year_Check(sender)
+        ComboBox_year.Select()
+        SendKeys.Send("{Enter}")
     End Sub
 
     '年ComboBoxの選択イベント
@@ -280,13 +283,15 @@ Public Class Calendar
             If inputMonth >= 1 And inputMonth <= 12 Then
                 ComboBox_month.SelectedValue = inputMonth
                 Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
+                ComboBox_month.CausesValidation = False
+                ButtonToday.Select()
+                ComboBox_month.CausesValidation = True
                 Return
             End If
         End If
         MsgBox("入力した月をチェックしてください。")
         '入力前の日付表示
         MonthComboBox_Update(lastRightMonth)
-        ComboBox_month.Select()
     End Sub
 
     '月ComboBoxの入力制限
@@ -302,7 +307,8 @@ Public Class Calendar
 
     '月ComboBox
     Private Sub ComboBox_month_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ComboBox_month.Validating
-        ComboBox_month_Check(sender)
+        ComboBox_month.Select()
+        SendKeys.Send("{Enter}")
     End Sub
 
     '月ComboBoxの選択イベント
