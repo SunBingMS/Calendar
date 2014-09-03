@@ -42,7 +42,7 @@ Partial Class Dialog1
         'OK_Button
         '
         resources.ApplyResources(Me.OK_Button, "OK_Button")
-        Me.OK_Button.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.OK_Button.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(235, Byte), Integer), CType(CType(175, Byte), Integer))
         Me.OK_Button.FlatAppearance.BorderColor = System.Drawing.Color.White
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.UseVisualStyleBackColor = False
@@ -50,7 +50,7 @@ Partial Class Dialog1
         'Cancel_Button
         '
         resources.ApplyResources(Me.Cancel_Button, "Cancel_Button")
-        Me.Cancel_Button.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.Cancel_Button.BackColor = System.Drawing.Color.FromArgb(CType(CType(246, Byte), Integer), CType(CType(184, Byte), Integer), CType(CType(148, Byte), Integer))
         Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Cancel_Button.FlatAppearance.BorderColor = System.Drawing.Color.White
         Me.Cancel_Button.Name = "Cancel_Button"
