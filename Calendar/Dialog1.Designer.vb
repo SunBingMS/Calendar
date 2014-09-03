@@ -27,7 +27,9 @@ Partial Class Dialog1
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.MemoContent = New System.Windows.Forms.RichTextBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -56,9 +58,17 @@ Partial Class Dialog1
         '
         'MemoContent
         '
+        Me.MemoContent.AcceptsTab = True
         Me.MemoContent.BorderStyle = System.Windows.Forms.BorderStyle.None
         resources.ApplyResources(Me.MemoContent, "MemoContent")
         Me.MemoContent.Name = "MemoContent"
+        '
+        'Panel1
+        '
+        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.MemoContent)
+        resources.ApplyResources(Me.Panel1, "Panel1")
+        Me.Panel1.Name = "Panel1"
         '
         'Dialog1
         '
@@ -66,7 +76,7 @@ Partial Class Dialog1
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.CancelButton = Me.Cancel_Button
         resources.ApplyResources(Me, "$this")
-        Me.Controls.Add(Me.MemoContent)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
@@ -75,6 +85,7 @@ Partial Class Dialog1
         Me.ShowInTaskbar = False
         Me.TopMost = True
         Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -82,5 +93,6 @@ Partial Class Dialog1
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents MemoContent As System.Windows.Forms.RichTextBox
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
 
 End Class

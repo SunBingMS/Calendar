@@ -11,6 +11,8 @@ Public Class Dialog1
     Dim intYear As Integer
     Dim intMonth As Integer
     Dim intDay As Integer
+    'DBのメモ
+    Dim strMemoDB As String = ""
 
     'ダイアログの初期化
     Public Sub Initial(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
@@ -34,6 +36,7 @@ Public Class Dialog1
         If dr.HasRows Then
             dr.Read()
             'メモの表示
+            strMemoDB = dr(0)
             MemoContent.Text = dr(0)
             dr.Close()
         End If
@@ -60,6 +63,19 @@ Public Class Dialog1
 
     'キャンセル処理
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
+        If Not strMemoDB = MemoContent.Text Then
+            Dim result As DialogResult = MessageBox.Show("メモの編集がありますが、保存しますか？", _
+                                             "質問", _
+                                             MessageBoxButtons.YesNo, _
+                                             MessageBoxIcon.Exclamation, _
+                                             MessageBoxDefaultButton.Button1)
+            '何が選択されたか調べる 
+            If result = DialogResult.Yes Then
+                '「はい」が選択された時 
+                OK_Button_Click(sender, New System.EventArgs())
+            End If
+        End If
+
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub
