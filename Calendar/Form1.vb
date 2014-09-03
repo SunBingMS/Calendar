@@ -156,7 +156,6 @@ Public Class Calendar
             If dr.HasRows Then
                 dr.Read()
                 If Not dr(0) = "" Then
-
                     DataGridView1.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Style.BackColor = Color.LightYellow
                 End If
             End If
