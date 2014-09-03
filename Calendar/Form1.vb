@@ -4,6 +4,9 @@ Public Class Calendar
 
     'ComboBoxの有効性フラグ
     Private isReady As Boolean = False
+    'ComboBoxミス入力前の正しい値
+    Private lastRightYear As Integer
+    Private lastRightMonth As Integer
 
     ' Connection string for ADO.NET via OleDB
     Dim cn As OleDbConnection =
@@ -100,6 +103,8 @@ Public Class Calendar
 
     'DataGridView更新処理
     Public Sub Calendar_Update(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
+        lastRightYear = year
+        lastRightMonth = month
         '全セルのスタイル設定
         For x = 0 To 6
             For y = 0 To 5
@@ -229,9 +234,8 @@ Public Class Calendar
             End If
         End If
         MsgBox("入力した年をチェックしてください。")
-        '今日の日付表示
-        Dim currentDate As Date = Now
-        YearComboBox_Update(currentDate.Year)
+        '入力前の日付表示
+        YearComboBox_Update(lastRightYear)
         ComboBox_year.Select()
     End Sub
 
@@ -280,9 +284,8 @@ Public Class Calendar
             End If
         End If
         MsgBox("入力した月をチェックしてください。")
-        '今日の日付表示
-        Dim currentDate As Date = Now
-        MonthComboBox_Update(currentDate.Month)
+        '入力前の日付表示
+        MonthComboBox_Update(lastRightMonth)
         ComboBox_month.Select()
     End Sub
 
@@ -353,6 +356,15 @@ Public Class Calendar
         MonthComboBox_Update(currentDate.Month)
         'カレンダー更新
         Calendar_Update(currentDate.Year, currentDate.Month, currentDate.Day)
+    End Sub
+
+    '×ボタンのCauseValidation無効処理
+    Protected Overrides Sub WndProc(ByRef m As System.Windows.Forms.Message)
+        Select Case ((m.WParam.ToInt64() And &HFFFF) And &HFFF0)
+            Case &HF060 ' The user chose to close the form.
+                Me.AutoValidate = System.Windows.Forms.AutoValidate.Disable
+        End Select
+        MyBase.WndProc(m)
     End Sub
 
 #End Region

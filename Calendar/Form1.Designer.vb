@@ -260,6 +260,8 @@ Partial Class Calendar
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange
+        Me.CausesValidation = False
         Me.ClientSize = New System.Drawing.Size(357, 357)
         Me.Controls.Add(Me.ButtonToday)
         Me.Controls.Add(Me.Label2)
