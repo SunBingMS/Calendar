@@ -1,7 +1,8 @@
 ﻿Imports System.Windows.Forms
 Imports System.Data.OleDb
 
-Public Class Dialog1
+
+Public Class MemoDialog
 
     ' Connection string for ADO.NET via OleDB
     Dim cn As OleDbConnection =
@@ -15,6 +16,7 @@ Public Class Dialog1
     Dim strMemoDB As String = ""
 
     'ダイアログの初期化
+
     Public Sub Initial(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
         '年月日
         intYear = year

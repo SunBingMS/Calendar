@@ -197,8 +197,8 @@ Public Class Calendar
                 Next
             Next
         Else
-            Dialog1.Initial(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, Integer.Parse(DataGridView1.SelectedCells.Item(0).Value))
-            Dialog1.ShowDialog()
+            MemoDialog.Initial(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, Integer.Parse(DataGridView1.SelectedCells.Item(0).Value))
+            MemoDialog.ShowDialog()
         End If
     End Sub
 
