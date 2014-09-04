@@ -1,69 +1,108 @@
-﻿Imports System.Data.OleDb
+﻿'********************************************************************
+'  システム            ：   カレンダーシステム
+'  サブシステム名 　   ：   カレンダーメイン画面
+'  クラス名　　　      ：   frmCalendar
+'  機能概要　　　      ：   □□□□□□□□□□□□□□□□
+'  作成日      　　　　：   2014/09/05
+'  作成者      　　　　：   SKB 孫　氷
+'  変更履歴    　　　　：   
+'********************************************************************
+Option Strict On
+Option Explicit On
+Option Compare Binary
 
+Imports System.Data.OleDb
+
+''' <summary>
+''' カレンダーメイン画面フレーム
+''' </summary>
+''' <remarks></remarks>
 Public Class frmCalendar
 
-    Private mbooReady As Boolean = False        'ComboBoxの有効性フラグ
+    Private mbooReady As Boolean = False        '年月ComboBoxの有効性フラグ
     Private mintLastCorrectYear As Integer = 0  '年ComboBoxミス入力前の正しい値
     Private mintLastCorrectMonth As Integer = 0 '月ComboBoxミス入力前の正しい値
 
-    ' Connection string for ADO.NET via OleDB
-    Dim cn As OleDbConnection =
-        New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=memo.mdb;")
-    Dim cmd As OleDbCommand
-
 #Region "Load"
 
-    'Window Load処理
+    ''' <summary>
+    ''' Window Load処理
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
     Private Sub Calendar_Load(sender As Object, e As EventArgs) Handles Me.Load
-        'カレンダーセルのサイズ設定
-        DataGridView1.RowTemplate.Height = 50
-        '年月ComboBox中身の初期化
-        YearComboBox_Initial()
-        MonthComboBox_Initial()
 
+        'カレンダーセルのサイズ設定
+        dgvCalendar.RowTemplate.Height = 50
+
+        '年月ComboBox中身の初期化
+        subInitialCmbYear()
+        subInitialCmbMonth()
+
+        'カレンダーGridViewの初期化
         For i = 1 To 6
-            DataGridView1.Rows.Add("-", "-", "-", "-", "-", "-", "-")
+            dgvCalendar.Rows.Add("-", "-", "-", "-", "-", "-", "-")
         Next
 
         '今日の日付表示
-        ButtonToday_Click(sender, New System.EventArgs())
+        Call subUpdateCalendarOfToday()
+
         'ComboBox有効にする
         mbooReady = True
+
     End Sub
 
 #End Region
 
 #Region "ComboBox"
 
-    '年のComboBox中身の初期化
-    Private Sub YearComboBox_Initial()
-        ComboBox_year.Items.Clear()
+    ''' <summary>
+    ''' 年ComboBox中身の初期化
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub subInitialCmbYear()
 
-        Dim dtYear As New DataTable
-        dtYear.Columns.Add("VALUE")
-        dtYear.Columns.Add("TEXT")
+        '年ComboBoxのクリア
+        cmbYear.Items.Clear()
 
+        '年データテーブルの作成
+        Dim dtblYear As New DataTable
+        dtblYear.Columns.Add("VALUE")
+        dtblYear.Columns.Add("TEXT")
+
+        '1000年～3000年まで
         For i = 1000 To 3000
-            dtYear.Rows.Add(i, i)
+            dtblYear.Rows.Add(i, i)
         Next
 
-        ComboBox_year.DataSource = dtYear
-        ComboBox_year.ValueMember = "VALUE"
-        ComboBox_year.DisplayMember = "TEXT"
+        '年ComboBoxのバインド
+        cmbYear.DataSource = dtblYear
+        cmbYear.ValueMember = "VALUE"
+        cmbYear.DisplayMember = "TEXT"
+
     End Sub
 
-    '月のComboBox中身の初期化
-    Private Sub MonthComboBox_Initial()
+    ''' <summary>
+    ''' 月のComboBox中身の初期化
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub subInitialCmbMonth()
+
+        '月ComboBoxのクリア
         ComboBox_month.Items.Clear()
 
+        '月データテーブルの作成
         Dim dtMonth As New DataTable
         dtMonth.Columns.Add("VALUE")
         dtMonth.Columns.Add("TEXT")
 
+        '1月～12月まで
         For i = 1 To 12
             dtMonth.Rows.Add(i, i)
         Next
 
+        '月ComboBoxのバインド
         ComboBox_month.DataSource = dtMonth
         ComboBox_month.ValueMember = "VALUE"
         ComboBox_month.DisplayMember = "TEXT"
@@ -71,7 +110,7 @@ Public Class frmCalendar
 
     '年ComboBoxの設定
     Private Sub YearComboBox_Update(year As Integer)
-        ComboBox_year.SelectedValue = year
+        cmbYear.SelectedValue = year
     End Sub
 
     '月ComboBoxの設定
@@ -87,7 +126,7 @@ Public Class frmCalendar
     Private Function DaysOfMonthCount(ByVal year As Integer, ByVal month As Integer) As Integer
         Dim daysOfMonth As Integer = 0
         If month < 12 Then
-            daysOfMonth = DateDiff("d", Str(year) + "-" & Str(month) + "-1", Str(year) + "-" + Str(month + 1) & "-1")
+            daysOfMonth = CType(DateDiff("d", Str(year) + "-" & Str(month) + "-1", Str(year) + "-" + Str(month + 1) & "-1"), Integer)
         Else
             daysOfMonth = DateDiff("d", Str(year) + "-" & Str(month) + "-1", Str(year + 1) + "-" + Str((month + 1) Mod 12) & "-1")
         End If
@@ -106,16 +145,16 @@ Public Class frmCalendar
         '全セルのスタイル設定
         For x = 0 To 6
             For y = 0 To 5
-                DataGridView1.Item(x, y).Value = "-"
+                dgvCalendar.Item(x, y).Value = "-"
                 If x = 0 Then
-                    DataGridView1.Item(x, y).Style.ForeColor = Color.Red
-                    DataGridView1.Item(x, y).Style.BackColor = Color.FromArgb(255, 240, 240)
+                    dgvCalendar.Item(x, y).Style.ForeColor = Color.Red
+                    dgvCalendar.Item(x, y).Style.BackColor = Color.FromArgb(255, 240, 240)
                 ElseIf x = 6 Then
-                    DataGridView1.Item(x, y).Style.ForeColor = Color.Blue
-                    DataGridView1.Item(x, y).Style.BackColor = Color.FromArgb(240, 240, 255)
+                    dgvCalendar.Item(x, y).Style.ForeColor = Color.Blue
+                    dgvCalendar.Item(x, y).Style.BackColor = Color.FromArgb(240, 240, 255)
                 Else
-                    DataGridView1.Item(x, y).Style.ForeColor = Color.Black
-                    DataGridView1.Item(x, y).Style.BackColor = Color.White
+                    dgvCalendar.Item(x, y).Style.ForeColor = Color.Black
+                    dgvCalendar.Item(x, y).Style.BackColor = Color.White
                 End If
             Next
         Next
@@ -138,49 +177,48 @@ Public Class frmCalendar
         End If
 
         'カレンダーへ出力
-        cn.Open()
-        cmd = New OleDbCommand()
-        cmd.Connection = cn
+        odbcnConnection.Open()
+        odbcmdCommand.Connection = odbcnConnection
         For i = 1 To daysOfMonth
             If i = day Then
-                DataGridView1.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Selected = True
+                dgvCalendar.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Selected = True
             End If
-            DataGridView1.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Value = i
+            dgvCalendar.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Value = i
 
             Dim tdate As String = String.Format("{0:0000}", year) & String.Format("{0:00}", month) & String.Format("{0:00}", i)
-            cmd.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & tdate
-            Dim dr As OleDbDataReader = cmd.ExecuteReader
+            odbcmdCommand.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & tdate
+            Dim dr As OleDbDataReader = odbcmdCommand.ExecuteReader
 
             If dr.HasRows Then
                 dr.Read()
                 If Not dr(0) = "" Then
-                    DataGridView1.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Style.BackColor = Color.LightYellow
+                    dgvCalendar.Item((i - 2 + monthStartWeek) Mod 7, (i - 2 + monthStartWeek) \ 7).Style.BackColor = Color.LightYellow
                 End If
             End If
             dr.Close()
         Next
-        cn.Close()
+        odbcnConnection.Close()
 
         '前月のカレンダーへ出力
         For i = 0 To monthStartWeek - 2
-            DataGridView1.Item(i, 0).Style.ForeColor = Color.Gray
-            DataGridView1.Item(i, 0).Style.BackColor = Color.FromArgb(240, 240, 240)
-            DataGridView1.Item(i, 0).Value = daysOfPreMonth - monthStartWeek + 2 + i
+            dgvCalendar.Item(i, 0).Style.ForeColor = Color.Gray
+            dgvCalendar.Item(i, 0).Style.BackColor = Color.FromArgb(240, 240, 240)
+            dgvCalendar.Item(i, 0).Value = daysOfPreMonth - monthStartWeek + 2 + i
         Next
 
         '次月のカレンダーへ出力
         For i = monthStartWeek + daysOfMonth To 6 * 7
-            DataGridView1.Item((i - 1) Mod 7, (i - 1) \ 7).Style.ForeColor = Color.Gray
-            DataGridView1.Item((i - 1) Mod 7, (i - 1) \ 7).Style.BackColor = Color.FromArgb(240, 240, 240)
-            DataGridView1.Item((i - 1) Mod 7, (i - 1) \ 7).Value = i - monthStartWeek - daysOfMonth + 1
+            dgvCalendar.Item((i - 1) Mod 7, (i - 1) \ 7).Style.ForeColor = Color.Gray
+            dgvCalendar.Item((i - 1) Mod 7, (i - 1) \ 7).Style.BackColor = Color.FromArgb(240, 240, 240)
+            dgvCalendar.Item((i - 1) Mod 7, (i - 1) \ 7).Value = i - monthStartWeek - daysOfMonth + 1
         Next
     End Sub
 
     'カレンダーのダブルクリックイベント
-    Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
-        If DataGridView1.SelectedCells.Item(0).Style.ForeColor = Color.Gray Then
+    Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCalendar.CellDoubleClick
+        If dgvCalendar.SelectedCells.Item(0).Style.ForeColor = Color.Gray Then
             Dim tmp As String = DataGridView1.SelectedCells.Item(0).Value
-            If DataGridView1.SelectedCells.Item(0).RowIndex >= 4 Then
+            If dgvCalendar.SelectedCells.Item(0).RowIndex >= 4 Then
                 ButtonNext_Click(sender, New System.EventArgs())
             Else
                 ButtonPre_Click(sender, New System.EventArgs())
@@ -190,7 +228,7 @@ Public Class frmCalendar
                 For y = 0 To 5
                     If DataGridView1.Item(x, y).Value = tmp And
                        Not DataGridView1.Item(x, y).Style.ForeColor = Color.Gray Then
-                        DataGridView1.Item(x, y).Selected = True
+                        dgvCalendar.Item(x, y).Selected = True
                     End If
                 Next
             Next
@@ -201,7 +239,7 @@ Public Class frmCalendar
     End Sub
 
     'Enterボタンの時Tabと同じにする
-    Private Sub DataGridView1_KeyDown(sender As Object, e As KeyEventArgs) Handles DataGridView1.KeyDown
+    Private Sub DataGridView1_KeyDown(sender As Object, e As KeyEventArgs) Handles dgvCalendar.KeyDown
         If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
             e.Handled = True
             SendKeys.Send("{TAB}")
@@ -213,7 +251,7 @@ Public Class frmCalendar
 #Region "ComboBox Event"
 
     '年ComboBoxのテキスト入力イベント
-    Private Sub ComboBox_year_KeyDown(sender As Object, e As KeyEventArgs) Handles ComboBox_year.KeyDown
+    Private Sub ComboBox_year_KeyDown(sender As Object, e As KeyEventArgs) Handles cmbYear.KeyDown
         If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
             ComboBox_year_Check(sender)
         End If
@@ -222,14 +260,14 @@ Public Class frmCalendar
     '年ComboBoxテキストチェック処理
     Private Sub ComboBox_year_Check(sender As Object)
         Dim inputYear As Integer = 0
-        If Integer.TryParse(ComboBox_year.Text, inputYear) Then
+        If Integer.TryParse(cmbYear.Text, inputYear) Then
             inputYear = ComboBox_year.Text
             If inputYear >= 1000 And inputYear <= 3000 Then
-                ComboBox_year.SelectedValue = inputYear
+                cmbYear.SelectedValue = inputYear
                 Calendar_Update(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, 1)
-                ComboBox_year.CausesValidation = False
+                cmbYear.CausesValidation = False
                 ComboBox_month.Select()
-                ComboBox_year.CausesValidation = True
+                cmbYear.CausesValidation = True
                 Return
             End If
         End If
@@ -239,7 +277,7 @@ Public Class frmCalendar
     End Sub
 
     '年ComboBoxの入力制限
-    Private Sub ComboBox_year_KeyPress(sender As Object, e As KeyPressEventArgs) Handles ComboBox_year.KeyPress
+    Private Sub ComboBox_year_KeyPress(sender As Object, e As KeyPressEventArgs) Handles cmbYear.KeyPress
         Dim currentKey As Integer = Convert.ToInt32(e.KeyChar)
         '0~9 と BackSpace以外の入力禁止
         If currentKey >= 48 And currentKey <= 57 Or currentKey = 8 Then
@@ -250,13 +288,13 @@ Public Class frmCalendar
     End Sub
 
     '年ComboBox
-    Private Sub ComboBox_year_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ComboBox_year.Validating
-        ComboBox_year.Select()
+    Private Sub ComboBox_year_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmbYear.Validating
+        cmbYear.Select()
         SendKeys.Send("{Enter}")
     End Sub
 
     '年ComboBoxの選択イベント
-    Private Sub ComboBox_year_SelectedValueChanged(sender As Object, e As EventArgs) Handles ComboBox_year.SelectedValueChanged
+    Private Sub ComboBox_year_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbYear.SelectedValueChanged
         'ComboBox有効性フラグチェック
         If Not mbooReady Then
             Return
@@ -328,10 +366,10 @@ Public Class frmCalendar
     Private Sub ButtonPre_Click(sender As Object, e As EventArgs) Handles ButtonPre.Click
         If ComboBox_month.SelectedIndex <= 0 Then
             ComboBox_month.SelectedIndex = ComboBox_month.Items.Count - 1
-            If ComboBox_year.SelectedIndex <= 0 Then
-                ComboBox_year.SelectedIndex = ComboBox_year.Items.Count - 1
+            If cmbYear.SelectedIndex <= 0 Then
+                cmbYear.SelectedIndex = cmbYear.Items.Count - 1
             Else
-                ComboBox_year.SelectedIndex = ComboBox_year.SelectedIndex - 1
+                cmbYear.SelectedIndex = cmbYear.SelectedIndex - 1
             End If
         Else
             ComboBox_month.SelectedIndex = ComboBox_month.SelectedIndex - 1
@@ -342,10 +380,10 @@ Public Class frmCalendar
     Private Sub ButtonNext_Click(sender As Object, e As EventArgs) Handles ButtonNext.Click
         If ComboBox_month.SelectedIndex >= ComboBox_month.Items.Count - 1 Then
             ComboBox_month.SelectedIndex = 0
-            If ComboBox_year.SelectedIndex >= ComboBox_year.Items.Count - 1 Then
-                ComboBox_year.SelectedIndex = 0
+            If cmbYear.SelectedIndex >= cmbYear.Items.Count - 1 Then
+                cmbYear.SelectedIndex = 0
             Else
-                ComboBox_year.SelectedIndex = ComboBox_year.SelectedIndex + 1
+                cmbYear.SelectedIndex = cmbYear.SelectedIndex + 1
             End If
         Else
             ComboBox_month.SelectedIndex = ComboBox_month.SelectedIndex + 1
@@ -354,6 +392,10 @@ Public Class frmCalendar
 
     '今日ボタンイベント
     Private Sub ButtonToday_Click(sender As Object, e As EventArgs) Handles ButtonToday.Click
+        Call subUpdateCalendarOfToday()
+    End Sub
+
+    Private Sub subUpdateCalendarOfToday()
         '年月ComboBoxのデフォールト値設定
         Dim currentDate As Date = Now
         YearComboBox_Update(currentDate.Year)

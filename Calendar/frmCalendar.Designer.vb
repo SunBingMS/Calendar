@@ -31,7 +31,7 @@ Partial Class frmCalendar
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmCalendar))
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.dgvCalendar = New System.Windows.Forms.DataGridView()
         Me.Su = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Mo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Tu = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -40,24 +40,24 @@ Partial Class frmCalendar
         Me.Fr = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Sa = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ButtonNext = New System.Windows.Forms.Button()
-        Me.ComboBox_year = New System.Windows.Forms.ComboBox()
+        Me.cmbYear = New System.Windows.Forms.ComboBox()
         Me.ComboBox_month = New System.Windows.Forms.ComboBox()
         Me.ButtonPre = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.ButtonToday = New System.Windows.Forms.Button()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dgvCalendar, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'DataGridView1
+        'dgvCalendar
         '
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToDeleteRows = False
-        Me.DataGridView1.AllowUserToResizeColumns = False
-        Me.DataGridView1.AllowUserToResizeRows = False
-        Me.DataGridView1.BackgroundColor = System.Drawing.SystemColors.Control
-        Me.DataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.DataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+        Me.dgvCalendar.AllowUserToAddRows = False
+        Me.dgvCalendar.AllowUserToDeleteRows = False
+        Me.dgvCalendar.AllowUserToResizeColumns = False
+        Me.dgvCalendar.AllowUserToResizeRows = False
+        Me.dgvCalendar.BackgroundColor = System.Drawing.SystemColors.Control
+        Me.dgvCalendar.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.dgvCalendar.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
         DataGridViewCellStyle1.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
@@ -65,21 +65,21 @@ Partial Class frmCalendar
         DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Su, Me.Mo, Me.Tu, Me.We, Me.Th, Me.Fr, Me.Sa})
-        Me.DataGridView1.EnableHeadersVisualStyles = False
-        Me.DataGridView1.Location = New System.Drawing.Point(3, 31)
-        Me.DataGridView1.MultiSelect = False
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.ReadOnly = True
-        Me.DataGridView1.RowHeadersVisible = False
-        Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.DataGridView1.RowTemplate.Height = 21
-        Me.DataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.None
-        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(351, 325)
-        Me.DataGridView1.TabIndex = 0
+        Me.dgvCalendar.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        Me.dgvCalendar.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        Me.dgvCalendar.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Su, Me.Mo, Me.Tu, Me.We, Me.Th, Me.Fr, Me.Sa})
+        Me.dgvCalendar.EnableHeadersVisualStyles = False
+        Me.dgvCalendar.Location = New System.Drawing.Point(3, 31)
+        Me.dgvCalendar.MultiSelect = False
+        Me.dgvCalendar.Name = "dgvCalendar"
+        Me.dgvCalendar.ReadOnly = True
+        Me.dgvCalendar.RowHeadersVisible = False
+        Me.dgvCalendar.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.dgvCalendar.RowTemplate.Height = 21
+        Me.dgvCalendar.ScrollBars = System.Windows.Forms.ScrollBars.None
+        Me.dgvCalendar.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.dgvCalendar.Size = New System.Drawing.Size(351, 325)
+        Me.dgvCalendar.TabIndex = 0
         '
         'Su
         '
@@ -190,16 +190,16 @@ Partial Class frmCalendar
         Me.ButtonNext.Text = ">>"
         Me.ButtonNext.UseVisualStyleBackColor = False
         '
-        'ComboBox_year
+        'cmbYear
         '
-        Me.ComboBox_year.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ComboBox_year.Font = New System.Drawing.Font("MS UI Gothic", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.ComboBox_year.FormattingEnabled = True
-        Me.ComboBox_year.Location = New System.Drawing.Point(80, 6)
-        Me.ComboBox_year.MaxLength = 4
-        Me.ComboBox_year.Name = "ComboBox_year"
-        Me.ComboBox_year.Size = New System.Drawing.Size(51, 21)
-        Me.ComboBox_year.TabIndex = 2
+        Me.cmbYear.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.cmbYear.Font = New System.Drawing.Font("MS UI Gothic", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.cmbYear.FormattingEnabled = True
+        Me.cmbYear.Location = New System.Drawing.Point(80, 6)
+        Me.cmbYear.MaxLength = 4
+        Me.cmbYear.Name = "cmbYear"
+        Me.cmbYear.Size = New System.Drawing.Size(51, 21)
+        Me.cmbYear.TabIndex = 2
         '
         'ComboBox_month
         '
@@ -268,10 +268,10 @@ Partial Class frmCalendar
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.ComboBox_month)
-        Me.Controls.Add(Me.ComboBox_year)
+        Me.Controls.Add(Me.cmbYear)
         Me.Controls.Add(Me.ButtonNext)
         Me.Controls.Add(Me.ButtonPre)
-        Me.Controls.Add(Me.DataGridView1)
+        Me.Controls.Add(Me.dgvCalendar)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
@@ -279,16 +279,16 @@ Partial Class frmCalendar
         Me.MinimizeBox = False
         Me.Name = "frmCalendar"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Calendar"
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Text = "カレンダー"
+        CType(Me.dgvCalendar, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
+    Friend WithEvents dgvCalendar As System.Windows.Forms.DataGridView
     Friend WithEvents ButtonPre As System.Windows.Forms.Button
     Friend WithEvents ButtonNext As System.Windows.Forms.Button
-    Friend WithEvents ComboBox_year As System.Windows.Forms.ComboBox
+    Friend WithEvents cmbYear As System.Windows.Forms.ComboBox
     Friend WithEvents ComboBox_month As System.Windows.Forms.ComboBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label

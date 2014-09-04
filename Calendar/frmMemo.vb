@@ -5,9 +5,9 @@ Imports System.Data.OleDb
 Public Class frmMemo
 
     ' Connection string for ADO.NET via OleDB
-    Dim cn As OleDbConnection =
+    Dim odbcnConnection As OleDbConnection =
         New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=memo.mdb;")
-    Dim cmd As OleDbCommand
+    Dim odbcmdCommand As OleDbCommand
     '年月日
     Dim intYear As Integer
     Dim intMonth As Integer
@@ -27,13 +27,13 @@ Public Class frmMemo
         Me.Text = year & "年" & month & "月" & day & "日 -- メモ"
         MemoContent.Text = ""
         strMemoDB = ""
-        cn.Open()
-        cmd = New OleDbCommand()
-        cmd.Connection = cn
+        odbcnConnection.Open()
+        odbcmdCommand = New OleDbCommand()
+        odbcmdCommand.Connection = odbcnConnection
 
         Dim tdate As String = String.Format("{0:0000}", year) & String.Format("{0:00}", month) & String.Format("{0:00}", day)
-        cmd.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & tdate
-        Dim dr As OleDbDataReader = cmd.ExecuteReader
+        odbcmdCommand.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & tdate
+        Dim dr As OleDbDataReader = odbcmdCommand.ExecuteReader
 
         '検索結果があれば
         If dr.HasRows Then
@@ -44,22 +44,22 @@ Public Class frmMemo
 
             dr.Close()
         End If
-        cn.Close()
+        odbcnConnection.Close()
     End Sub
 
     'メモの保存処理
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        cn.Open()
+        odbcnConnection.Open()
         '当日の古い内容を削除する
         Dim tdate As String = String.Format("{0:0000}", intYear) & String.Format("{0:00}", intMonth) & String.Format("{0:00}", intDay)
-        cmd.CommandText = "DELETE FROM tb_memo WHERE f_date =" & tdate
-        cmd.ExecuteNonQuery()
+        odbcmdCommand.CommandText = "DELETE FROM tb_memo WHERE f_date =" & tdate
+        odbcmdCommand.ExecuteNonQuery()
         If Not MemoContent.Text = "" Then
             '当日の新メモを追加する
-            cmd.CommandText = "INSERT INTO tb_memo VALUES('" & tdate & "','" & String_Encode(MemoContent.Text) & "')"
-            cmd.ExecuteNonQuery()
+            odbcmdCommand.CommandText = "INSERT INTO tb_memo VALUES('" & tdate & "','" & String_Encode(MemoContent.Text) & "')"
+            odbcmdCommand.ExecuteNonQuery()
         End If
-        cn.Close()
+        odbcnConnection.Close()
         frmCalendar.Calendar_Update(intYear, intMonth, intDay)
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
