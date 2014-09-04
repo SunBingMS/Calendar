@@ -6,7 +6,7 @@ Public Class MemoDialog
 
     ' Connection string for ADO.NET via OleDB
     Dim cn As OleDbConnection =
-        New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=memo.accdb;")
+        New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=memo.mdb;")
     Dim cmd As OleDbCommand
     '年月日
     Dim intYear As Integer

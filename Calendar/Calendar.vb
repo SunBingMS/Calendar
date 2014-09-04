@@ -3,14 +3,14 @@
 Public Class Calendar
 
     'ComboBoxの有効性フラグ
-    Private isReady As Boolean = False
+    Private mbooReady As Boolean = False
     'ComboBoxミス入力前の正しい値
     Private lastRightYear As Integer
     Private lastRightMonth As Integer
 
     ' Connection string for ADO.NET via OleDB
     Dim cn As OleDbConnection =
-        New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=memo.accdb;")
+        New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=memo.mdb;")
     Dim cmd As OleDbCommand
 
 #Region "Load"
@@ -30,7 +30,7 @@ Public Class Calendar
         '今日の日付表示
         ButtonToday_Click(sender, New System.EventArgs())
         'ComboBox有効にする
-        isReady = True
+        mbooReady = True
     End Sub
 
 #End Region
@@ -260,7 +260,7 @@ Public Class Calendar
     '年ComboBoxの選択イベント
     Private Sub ComboBox_year_SelectedValueChanged(sender As Object, e As EventArgs) Handles ComboBox_year.SelectedValueChanged
         'ComboBox有効性フラグチェック
-        If Not isReady Then
+        If Not mbooReady Then
             Return
         End If
 
@@ -314,7 +314,7 @@ Public Class Calendar
     '月ComboBoxの選択イベント
     Private Sub ComboBox_month_SelectedValueChanged(sender As Object, e As EventArgs) Handles ComboBox_month.SelectedValueChanged
         'ComboBox有効性フラグチェック
-        If Not isReady Then
+        If Not mbooReady Then
             Return
         End If
 
