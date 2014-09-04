@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class MemoDialog
+Partial Class frmMemo
     Inherits System.Windows.Forms.Form
 
     'フォームがコンポーネントの一覧をクリーンアップするために dispose をオーバーライドします。
@@ -22,7 +22,7 @@ Partial Class MemoDialog
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MemoDialog))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMemo))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
@@ -70,7 +70,7 @@ Partial Class MemoDialog
         resources.ApplyResources(Me.Panel1, "Panel1")
         Me.Panel1.Name = "Panel1"
         '
-        'MemoDialog
+        'frmMemo
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -82,7 +82,7 @@ Partial Class MemoDialog
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "MemoDialog"
+        Me.Name = "frmMemo"
         Me.ShowInTaskbar = False
         Me.TopMost = True
         Me.TableLayoutPanel1.ResumeLayout(False)

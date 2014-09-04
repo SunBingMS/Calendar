@@ -2,7 +2,7 @@
 Imports System.Data.OleDb
 
 
-Public Class MemoDialog
+Public Class frmMemo
 
     ' Connection string for ADO.NET via OleDB
     Dim cn As OleDbConnection =
@@ -60,7 +60,7 @@ Public Class MemoDialog
             cmd.ExecuteNonQuery()
         End If
         cn.Close()
-        Calendar.Calendar_Update(intYear, intMonth, intDay)
+        frmCalendar.Calendar_Update(intYear, intMonth, intDay)
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub

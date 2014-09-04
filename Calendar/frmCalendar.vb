@@ -1,12 +1,10 @@
 ﻿Imports System.Data.OleDb
 
-Public Class Calendar
+Public Class frmCalendar
 
-    'ComboBoxの有効性フラグ
-    Private mbooReady As Boolean = False
-    'ComboBoxミス入力前の正しい値
-    Private lastRightYear As Integer
-    Private lastRightMonth As Integer
+    Private mbooReady As Boolean = False        'ComboBoxの有効性フラグ
+    Private mintLastCorrectYear As Integer = 0  '年ComboBoxミス入力前の正しい値
+    Private mintLastCorrectMonth As Integer = 0 '月ComboBoxミス入力前の正しい値
 
     ' Connection string for ADO.NET via OleDB
     Dim cn As OleDbConnection =
@@ -103,8 +101,8 @@ Public Class Calendar
 
     'DataGridView更新処理
     Public Sub Calendar_Update(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
-        lastRightYear = year
-        lastRightMonth = month
+        mintLastCorrectYear = year
+        mintLastCorrectMonth = month
         '全セルのスタイル設定
         For x = 0 To 6
             For y = 0 To 5
@@ -197,8 +195,8 @@ Public Class Calendar
                 Next
             Next
         Else
-            MemoDialog.Initial(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, Integer.Parse(DataGridView1.SelectedCells.Item(0).Value))
-            MemoDialog.ShowDialog()
+            frmMemo.Initial(ComboBox_year.SelectedValue, ComboBox_month.SelectedValue, Integer.Parse(DataGridView1.SelectedCells.Item(0).Value))
+            frmMemo.ShowDialog()
         End If
     End Sub
 
@@ -237,7 +235,7 @@ Public Class Calendar
         End If
         MsgBox("入力した年をチェックしてください。")
         '入力前の日付表示
-        YearComboBox_Update(lastRightYear)
+        YearComboBox_Update(mintLastCorrectYear)
     End Sub
 
     '年ComboBoxの入力制限
@@ -291,7 +289,7 @@ Public Class Calendar
         End If
         MsgBox("入力した月をチェックしてください。")
         '入力前の日付表示
-        MonthComboBox_Update(lastRightMonth)
+        MonthComboBox_Update(mintLastCorrectMonth)
     End Sub
 
     '月ComboBoxの入力制限

@@ -91,17 +91,17 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MemoDialog.Designer.vb">
-      <DependentUpon>MemoDialog.vb</DependentUpon>
+    <Compile Include="frmMemo.Designer.vb">
+      <DependentUpon>frmMemo.vb</DependentUpon>
     </Compile>
-    <Compile Include="MemoDialog.vb">
+    <Compile Include="frmMemo.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Calendar.vb">
+    <Compile Include="frmCalendar.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Calendar.Designer.vb">
-      <DependentUpon>Calendar.vb</DependentUpon>
+    <Compile Include="frmCalendar.Designer.vb">
+      <DependentUpon>frmCalendar.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -121,14 +121,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MemoDialog.is.resx">
-      <DependentUpon>MemoDialog.vb</DependentUpon>
+    <EmbeddedResource Include="frmMemo.is.resx">
+      <DependentUpon>frmMemo.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MemoDialog.resx">
-      <DependentUpon>MemoDialog.vb</DependentUpon>
+    <EmbeddedResource Include="frmMemo.resx">
+      <DependentUpon>frmMemo.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Calendar.resx">
-      <DependentUpon>Calendar.vb</DependentUpon>
+    <EmbeddedResource Include="frmCalendar.resx">
+      <DependentUpon>frmCalendar.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

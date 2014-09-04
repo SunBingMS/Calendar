@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class Calendar
+Partial Class frmCalendar
     Inherits System.Windows.Forms.Form
 
     'フォームがコンポーネントの一覧をクリーンアップするために dispose をオーバーライドします。
@@ -30,15 +30,8 @@ Partial Class Calendar
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Calendar))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmCalendar))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.ButtonNext = New System.Windows.Forms.Button()
-        Me.ComboBox_year = New System.Windows.Forms.ComboBox()
-        Me.ComboBox_month = New System.Windows.Forms.ComboBox()
-        Me.ButtonPre = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.ButtonToday = New System.Windows.Forms.Button()
         Me.Su = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Mo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Tu = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -46,6 +39,13 @@ Partial Class Calendar
         Me.Th = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fr = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Sa = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ButtonNext = New System.Windows.Forms.Button()
+        Me.ComboBox_year = New System.Windows.Forms.ComboBox()
+        Me.ComboBox_month = New System.Windows.Forms.ComboBox()
+        Me.ButtonPre = New System.Windows.Forms.Button()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.ButtonToday = New System.Windows.Forms.Button()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -80,84 +80,6 @@ Partial Class Calendar
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.DataGridView1.Size = New System.Drawing.Size(351, 325)
         Me.DataGridView1.TabIndex = 0
-        '
-        'ButtonNext
-        '
-        Me.ButtonNext.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(235, Byte), Integer), CType(CType(175, Byte), Integer))
-        Me.ButtonNext.FlatAppearance.BorderColor = System.Drawing.Color.White
-        Me.ButtonNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonNext.Location = New System.Drawing.Point(308, 5)
-        Me.ButtonNext.Name = "ButtonNext"
-        Me.ButtonNext.Size = New System.Drawing.Size(45, 22)
-        Me.ButtonNext.TabIndex = 7
-        Me.ButtonNext.Text = ">>"
-        Me.ButtonNext.UseVisualStyleBackColor = False
-        '
-        'ComboBox_year
-        '
-        Me.ComboBox_year.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ComboBox_year.Font = New System.Drawing.Font("MS UI Gothic", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.ComboBox_year.FormattingEnabled = True
-        Me.ComboBox_year.Location = New System.Drawing.Point(80, 6)
-        Me.ComboBox_year.MaxLength = 4
-        Me.ComboBox_year.Name = "ComboBox_year"
-        Me.ComboBox_year.Size = New System.Drawing.Size(51, 21)
-        Me.ComboBox_year.TabIndex = 2
-        '
-        'ComboBox_month
-        '
-        Me.ComboBox_month.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ComboBox_month.Font = New System.Drawing.Font("MS UI Gothic", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.ComboBox_month.FormattingEnabled = True
-        Me.ComboBox_month.Location = New System.Drawing.Point(158, 6)
-        Me.ComboBox_month.MaxLength = 2
-        Me.ComboBox_month.Name = "ComboBox_month"
-        Me.ComboBox_month.Size = New System.Drawing.Size(40, 21)
-        Me.ComboBox_month.TabIndex = 4
-        '
-        'ButtonPre
-        '
-        Me.ButtonPre.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(235, Byte), Integer), CType(CType(175, Byte), Integer))
-        Me.ButtonPre.FlatAppearance.BorderColor = System.Drawing.Color.White
-        Me.ButtonPre.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonPre.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.ButtonPre.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.ButtonPre.Location = New System.Drawing.Point(4, 5)
-        Me.ButtonPre.Name = "ButtonPre"
-        Me.ButtonPre.Size = New System.Drawing.Size(45, 22)
-        Me.ButtonPre.TabIndex = 1
-        Me.ButtonPre.Text = "<<"
-        Me.ButtonPre.UseVisualStyleBackColor = False
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(135, 10)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(17, 12)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "年"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(201, 10)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(17, 12)
-        Me.Label2.TabIndex = 5
-        Me.Label2.Text = "月"
-        '
-        'ButtonToday
-        '
-        Me.ButtonToday.BackColor = System.Drawing.Color.FromArgb(CType(CType(234, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(252, Byte), Integer))
-        Me.ButtonToday.FlatAppearance.BorderColor = System.Drawing.Color.White
-        Me.ButtonToday.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonToday.Location = New System.Drawing.Point(224, 5)
-        Me.ButtonToday.Name = "ButtonToday"
-        Me.ButtonToday.Size = New System.Drawing.Size(50, 22)
-        Me.ButtonToday.TabIndex = 6
-        Me.ButtonToday.Text = "今日"
-        Me.ButtonToday.UseVisualStyleBackColor = False
         '
         'Su
         '
@@ -256,7 +178,85 @@ Partial Class Calendar
         Me.Sa.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.Sa.Width = 50
         '
-        'Calendar
+        'ButtonNext
+        '
+        Me.ButtonNext.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(235, Byte), Integer), CType(CType(175, Byte), Integer))
+        Me.ButtonNext.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.ButtonNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonNext.Location = New System.Drawing.Point(308, 5)
+        Me.ButtonNext.Name = "ButtonNext"
+        Me.ButtonNext.Size = New System.Drawing.Size(45, 22)
+        Me.ButtonNext.TabIndex = 7
+        Me.ButtonNext.Text = ">>"
+        Me.ButtonNext.UseVisualStyleBackColor = False
+        '
+        'ComboBox_year
+        '
+        Me.ComboBox_year.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ComboBox_year.Font = New System.Drawing.Font("MS UI Gothic", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.ComboBox_year.FormattingEnabled = True
+        Me.ComboBox_year.Location = New System.Drawing.Point(80, 6)
+        Me.ComboBox_year.MaxLength = 4
+        Me.ComboBox_year.Name = "ComboBox_year"
+        Me.ComboBox_year.Size = New System.Drawing.Size(51, 21)
+        Me.ComboBox_year.TabIndex = 2
+        '
+        'ComboBox_month
+        '
+        Me.ComboBox_month.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ComboBox_month.Font = New System.Drawing.Font("MS UI Gothic", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.ComboBox_month.FormattingEnabled = True
+        Me.ComboBox_month.Location = New System.Drawing.Point(158, 6)
+        Me.ComboBox_month.MaxLength = 2
+        Me.ComboBox_month.Name = "ComboBox_month"
+        Me.ComboBox_month.Size = New System.Drawing.Size(40, 21)
+        Me.ComboBox_month.TabIndex = 4
+        '
+        'ButtonPre
+        '
+        Me.ButtonPre.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(235, Byte), Integer), CType(CType(175, Byte), Integer))
+        Me.ButtonPre.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.ButtonPre.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonPre.Font = New System.Drawing.Font("MS UI Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.ButtonPre.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.ButtonPre.Location = New System.Drawing.Point(4, 5)
+        Me.ButtonPre.Name = "ButtonPre"
+        Me.ButtonPre.Size = New System.Drawing.Size(45, 22)
+        Me.ButtonPre.TabIndex = 1
+        Me.ButtonPre.Text = "<<"
+        Me.ButtonPre.UseVisualStyleBackColor = False
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(135, 10)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(17, 12)
+        Me.Label1.TabIndex = 3
+        Me.Label1.Text = "年"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(201, 10)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(17, 12)
+        Me.Label2.TabIndex = 5
+        Me.Label2.Text = "月"
+        '
+        'ButtonToday
+        '
+        Me.ButtonToday.BackColor = System.Drawing.Color.FromArgb(CType(CType(234, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(252, Byte), Integer))
+        Me.ButtonToday.FlatAppearance.BorderColor = System.Drawing.Color.White
+        Me.ButtonToday.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonToday.Location = New System.Drawing.Point(224, 5)
+        Me.ButtonToday.Name = "ButtonToday"
+        Me.ButtonToday.Size = New System.Drawing.Size(50, 22)
+        Me.ButtonToday.TabIndex = 6
+        Me.ButtonToday.Text = "今日"
+        Me.ButtonToday.UseVisualStyleBackColor = False
+        '
+        'frmCalendar
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -277,7 +277,7 @@ Partial Class Calendar
         Me.KeyPreview = True
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "Calendar"
+        Me.Name = "frmCalendar"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Calendar"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
