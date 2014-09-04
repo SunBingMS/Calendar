@@ -41,7 +41,7 @@ Partial Class frmCalendar
         Me.Sa = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ButtonNext = New System.Windows.Forms.Button()
         Me.cmbYear = New System.Windows.Forms.ComboBox()
-        Me.ComboBox_month = New System.Windows.Forms.ComboBox()
+        Me.cmbMonth = New System.Windows.Forms.ComboBox()
         Me.ButtonPre = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -201,16 +201,16 @@ Partial Class frmCalendar
         Me.cmbYear.Size = New System.Drawing.Size(51, 21)
         Me.cmbYear.TabIndex = 2
         '
-        'ComboBox_month
+        'cmbMonth
         '
-        Me.ComboBox_month.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ComboBox_month.Font = New System.Drawing.Font("MS UI Gothic", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
-        Me.ComboBox_month.FormattingEnabled = True
-        Me.ComboBox_month.Location = New System.Drawing.Point(158, 6)
-        Me.ComboBox_month.MaxLength = 2
-        Me.ComboBox_month.Name = "ComboBox_month"
-        Me.ComboBox_month.Size = New System.Drawing.Size(40, 21)
-        Me.ComboBox_month.TabIndex = 4
+        Me.cmbMonth.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.cmbMonth.Font = New System.Drawing.Font("MS UI Gothic", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.cmbMonth.FormattingEnabled = True
+        Me.cmbMonth.Location = New System.Drawing.Point(158, 6)
+        Me.cmbMonth.MaxLength = 2
+        Me.cmbMonth.Name = "cmbMonth"
+        Me.cmbMonth.Size = New System.Drawing.Size(40, 21)
+        Me.cmbMonth.TabIndex = 4
         '
         'ButtonPre
         '
@@ -267,7 +267,7 @@ Partial Class frmCalendar
         Me.Controls.Add(Me.ButtonToday)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.ComboBox_month)
+        Me.Controls.Add(Me.cmbMonth)
         Me.Controls.Add(Me.cmbYear)
         Me.Controls.Add(Me.ButtonNext)
         Me.Controls.Add(Me.ButtonPre)
@@ -289,7 +289,7 @@ Partial Class frmCalendar
     Friend WithEvents ButtonPre As System.Windows.Forms.Button
     Friend WithEvents ButtonNext As System.Windows.Forms.Button
     Friend WithEvents cmbYear As System.Windows.Forms.ComboBox
-    Friend WithEvents ComboBox_month As System.Windows.Forms.ComboBox
+    Friend WithEvents cmbMonth As System.Windows.Forms.ComboBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents ButtonToday As System.Windows.Forms.Button

@@ -60,7 +60,7 @@ Public Class frmMemo
             odbcmdCommand.ExecuteNonQuery()
         End If
         odbcnConnection.Close()
-        frmCalendar.Calendar_Update(intYear, intMonth, intDay)
+        frmCalendar.subUpdateCalendar(intYear, intMonth, intDay)
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
