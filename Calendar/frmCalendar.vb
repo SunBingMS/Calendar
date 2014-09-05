@@ -2,7 +2,7 @@
 '  システム            ：   カレンダーシステム
 '  サブシステム名 　   ：   カレンダーメイン画面
 '  クラス名　　　      ：   frmCalendar
-'  機能概要　　　      ：   □□□□□□□□□□□□□□□□
+'  機能概要　　　      ：   
 '  作成日      　　　　：   2014/09/05
 '  作成者      　　　　：   SKB 孫　氷
 '  変更履歴    　　　　：   
@@ -37,8 +37,8 @@ Public Class frmCalendar
         dgvCalendar.RowTemplate.Height = 50
 
         '年月ComboBox中身の初期化
-        subInitialCmbYear()
-        subInitialCmbMonth()
+        Call subInitialCmbYear()
+        Call subInitialCmbMonth()
 
         'カレンダーGridViewの初期化
         For i As Integer = 1 To 6
@@ -221,7 +221,7 @@ Public Class frmCalendar
             intMonthStartWeek = 8
         End If
 
-        'カレンダーへ出力
+        '今月情報をカレンダーへ出力
         Try
             'DBオープン
             odbcnConnection.Open()
@@ -247,189 +247,314 @@ Public Class frmCalendar
                 odbcmdCommand.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & strDate
 
                 '当日のメモデータ取得
-                Dim dr As OleDbDataReader = odbcmdCommand.ExecuteReader
-                If dr.HasRows Then
-                    dr.Read()
+                Dim odbDataReader As OleDbDataReader = odbcmdCommand.ExecuteReader
+                If odbDataReader.HasRows Then
+                    odbDataReader.Read()
                     '当日のメモは非空の場合
-                    If Not dr(0).Equals("") Then
-                        dgvCalendar.Item((i - 2 + intMonthStartWeek) Mod 7, (i - 2 + intMonthStartWeek) \ 7).Style.BackColor = Color.LightYellow
+                    If Not odbDataReader(0).Equals("") Then
+                        '背景を黄色にする
+                        dgvCalendar.Item((i - 2 + intMonthStartWeek) Mod 7, _
+                                         (i - 2 + intMonthStartWeek) \ 7).Style.BackColor = Color.LightYellow
                     End If
                 End If
-                dr.Close()
+                odbDataReader.Close()
             Next
 
         Catch ex As Exception
-
+            MsgBox("DBロードエラー")
         Finally
-
+            odbcnConnection.Close()
         End Try
-        odbcnConnection.Close()
 
-        '前月のカレンダーへ出力
-        For i = 0 To intMonthStartWeek - 2
+        '前月情報をカレンダーへ出力
+        For i As Integer = 0 To intMonthStartWeek - 2
             dgvCalendar.Item(i, 0).Style.ForeColor = Color.Gray
             dgvCalendar.Item(i, 0).Style.BackColor = Color.FromArgb(240, 240, 240)
             dgvCalendar.Item(i, 0).Value = intDaysOfPreMonth - intMonthStartWeek + 2 + i
         Next
 
-        '次月のカレンダーへ出力
-        For i = intMonthStartWeek + lngDaysOfMonth To 6 * 7
+        '次月情報をカレンダーへ出力
+        For i As Integer = intMonthStartWeek + lngDaysOfMonth To 6 * 7
             dgvCalendar.Item((i - 1) Mod 7, (i - 1) \ 7).Style.ForeColor = Color.Gray
             dgvCalendar.Item((i - 1) Mod 7, (i - 1) \ 7).Style.BackColor = Color.FromArgb(240, 240, 240)
             dgvCalendar.Item((i - 1) Mod 7, (i - 1) \ 7).Value = i - intMonthStartWeek - lngDaysOfMonth + 1
         Next
+
     End Sub
 
-    'カレンダーのダブルクリックイベント
-    Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCalendar.CellDoubleClick
+    ''' <summary>
+    ''' カレンダーのダブルクリックイベント
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub dgvCalendar_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCalendar.CellDoubleClick
+
         If dgvCalendar.SelectedCells.Item(0).Style.ForeColor = Color.Gray Then
-            Dim tmp As String = DataGridView1.SelectedCells.Item(0).Value
+
+            '選択対象は今月ではない場合
+            Dim strSelectDay As String = dgvCalendar.SelectedCells.Item(0).Value.ToString
             If dgvCalendar.SelectedCells.Item(0).RowIndex >= 4 Then
-                ButtonNext_Click(sender, New System.EventArgs())
+                '次月の場合
+                Call subChangeToNextMonth()
             Else
-                ButtonPre_Click(sender, New System.EventArgs())
+                '前月の場合
+                Call subChangeToPreMonth()
             End If
+
             'セルの選択
             For x = 0 To 6
                 For y = 0 To 5
-                    If DataGridView1.Item(x, y).Value = tmp And
-                       Not DataGridView1.Item(x, y).Style.ForeColor = Color.Gray Then
+                    If dgvCalendar.Item(x, y).Value.Equals(strSelectDay) And
+                       Not dgvCalendar.Item(x, y).Style.ForeColor = Color.Gray Then
                         dgvCalendar.Item(x, y).Selected = True
                     End If
                 Next
             Next
         Else
-            frmMemo.Initial(subUpdateCalendar.SelectedValue, ComboBox_month.SelectedValue, Integer.Parse(DataGridView1.SelectedCells.Item(0).Value))
-            frmMemo.ShowDialog()
+
+            '選択対象は今月の場合
+            Call frmMemo.subInitial(Integer.Parse(cmbYear.SelectedValue.ToString), _
+                            Integer.Parse(cmbMonth.SelectedValue.ToString), _
+                            Integer.Parse(dgvCalendar.SelectedCells.Item(0).Value.ToString))
+
+            'メモダイアログの表示
+            Call frmMemo.ShowDialog()
         End If
+
     End Sub
 
-    'Enterボタンの時Tabと同じにする
-    Private Sub DataGridView1_KeyDown(sender As Object, e As KeyEventArgs) Handles dgvCalendar.KeyDown
+    ''' <summary>
+    ''' Enterボタンの時Tabと同じにする
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub dgvCalendar_KeyDown(sender As Object, e As KeyEventArgs) Handles dgvCalendar.KeyDown
+
+        'EnterとTab
         If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
             e.Handled = True
             SendKeys.Send("{TAB}")
         End If
+
     End Sub
 
 #End Region
 
-#Region "ComboBox Event"
+#Region "ComboBox 年 Event"
 
-    '年ComboBoxのテキスト入力イベント
-    Private Sub subUpdateCalendar_KeyDown(sender As Object, e As KeyEventArgs) Handles cmbYear.KeyDown
-        If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
-            subUpdateCalendar_Check(sender)
-        End If
-    End Sub
+    ''' <summary>
+    ''' 年ComboBoxテキストチェック処理
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub subCheckYear()
 
-    '年ComboBoxテキストチェック処理
-    Private Sub subUpdateCalendar_Check(sender As Object)
         Dim inputYear As Integer = 0
+
+        '入力した年は数字の場合
         If Integer.TryParse(cmbYear.Text, inputYear) Then
-            inputYear = subUpdateCalendar.Text
-            If inputYear >= 1000 And inputYear <= 3000 Then
+            inputYear = Integer.Parse(cmbYear.Text)
+
+            '1000～3000範囲内の場合
+            If 1000 <= inputYear And inputYear <= 3000 Then
+
                 cmbYear.SelectedValue = inputYear
-                subUpdateCalendar(subUpdateCalendar.SelectedValue, ComboBox_month.SelectedValue, 1)
+                Call subUpdateCalendar(Integer.Parse(cmbYear.SelectedValue.ToString), _
+                                  Integer.Parse(cmbMonth.SelectedValue.ToString), _
+                                  1)
                 cmbYear.CausesValidation = False
                 cmbMonth.Select()
                 cmbYear.CausesValidation = True
+
                 Return
             End If
         End If
+
         MsgBox("入力した年をチェックしてください。")
+
         '入力前の日付表示
-        subSetCmbYear(mintLastCorrectYear)
+        Call subSetCmbYear(mintLastCorrectYear)
+
     End Sub
 
-    '年ComboBoxの入力制限
-    Private Sub subUpdateCalendar_KeyPress(sender As Object, e As KeyPressEventArgs) Handles cmbYear.KeyPress
+    ''' <summary>
+    ''' 年ComboBoxの入力制限
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub cmbYear_KeyPress(sender As Object, e As KeyPressEventArgs) Handles cmbYear.KeyPress
+
         Dim currentKey As Integer = Convert.ToInt32(e.KeyChar)
+
         '0~9 と BackSpace以外の入力禁止
         If currentKey >= 48 And currentKey <= 57 Or currentKey = 8 Then
             Return
         Else
             e.Handled = True
         End If
+
     End Sub
 
-    '年ComboBox
-    Private Sub subUpdateCalendar_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmbYear.Validating
+    ''' <summary>
+    ''' 年ComboBoxのテキスト入力後Enterボタンイベント
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub cmbYear_KeyDown(sender As Object, e As KeyEventArgs) Handles cmbYear.KeyDown
+
+        'EnterとテンキーのEnter
+        If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
+            Call subCheckYear()
+        End If
+
+    End Sub
+
+    ''' <summary>
+    ''' 年ComboBoxのTabボタンイベント
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub cmbYear_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmbYear.Validating
         cmbYear.Select()
-        SendKeys.Send("{Enter}")
+        Call subCheckYear()
     End Sub
 
-    '年ComboBoxの選択イベント
-    Private Sub subUpdateCalendar_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbYear.SelectedValueChanged
+    ''' <summary>
+    ''' 年ComboBoxの選択イベント
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub cmbYear_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbYear.SelectedValueChanged
+
         'ComboBox有効性フラグチェック
         If Not mbooReady Then
             Return
         End If
 
         'カレンダー更新
-        subUpdateCalendar(subUpdateCalendar.SelectedValue, ComboBox_month.SelectedValue, 1)
+        Call subUpdateCalendar(Integer.Parse(cmbYear.SelectedValue.ToString), _
+                          Integer.Parse(cmbMonth.SelectedValue.ToString), _
+                          1)
+
     End Sub
 
-    '月ComboBoxのテキスト入力イベント
-    Private Sub ComboBox_month_KeyDown(sender As Object, e As KeyEventArgs) Handles cmbMonth.KeyDown
-        If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
-            ComboBox_month_Check(sender)
-        End If
-    End Sub
+#End Region
 
-    '月ComboBoxテキストチェック処理
-    Private Sub ComboBox_month_Check(sender As Object)
+#Region "ComboBox 月 Event"
+
+    ''' <summary>
+    ''' 月ComboBoxテキストチェック処理
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub subCheckMonth()
+
         Dim inputMonth As Integer = 0
+
+        '入力した月は数字の場合
         If Integer.TryParse(cmbMonth.Text, inputMonth) Then
-            inputMonth = ComboBox_month.Text
-            If inputMonth >= 1 And inputMonth <= 12 Then
+            inputMonth = Integer.Parse(cmbMonth.Text)
+
+            '1～12の範囲内の場合
+            If 1 <= inputMonth And inputMonth <= 12 Then
                 cmbMonth.SelectedValue = inputMonth
-                subUpdateCalendar(subUpdateCalendar.SelectedValue, ComboBox_month.SelectedValue, 1)
+                Call subUpdateCalendar(Integer.Parse(cmbYear.SelectedValue.ToString), _
+                                  Integer.Parse(cmbMonth.SelectedValue.ToString), _
+                                  1)
                 cmbMonth.CausesValidation = False
                 ButtonToday.Select()
                 cmbMonth.CausesValidation = True
+
                 Return
             End If
         End If
+
         MsgBox("入力した月をチェックしてください。")
+
         '入力前の日付表示
-        subSetCmbMonth(mintLastCorrectMonth)
+        Call subSetCmbMonth(mintLastCorrectMonth)
+
     End Sub
 
-    '月ComboBoxの入力制限
-    Private Sub ComboBox_month_KeyPress(sender As Object, e As KeyPressEventArgs) Handles cmbMonth.KeyPress
+    ''' <summary>
+    ''' 月ComboBoxの入力制限
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub cmbMonth_KeyPress(sender As Object, e As KeyPressEventArgs) Handles cmbMonth.KeyPress
+
         Dim currentKey As Integer = Convert.ToInt32(e.KeyChar)
+
         '0~9 と BackSpace以外の入力禁止
         If currentKey >= 48 And currentKey <= 57 Or currentKey = 8 Then
             Return
         Else
             e.Handled = True
         End If
+
     End Sub
 
-    '月ComboBox
-    Private Sub ComboBox_month_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmbMonth.Validating
+    ''' <summary>
+    ''' 月ComboBoxのテキスト入力後Enterボタンイベント
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub cmbMonth_KeyDown(sender As Object, e As KeyEventArgs) Handles cmbMonth.KeyDown
+
+        'EnterとテンキーのEnter
+        If e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Separator Then
+            Call subCheckMonth()
+        End If
+
+    End Sub
+
+    ''' <summary>
+    ''' 月ComboBoxのTabボタンイベント
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub cmbMonth_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmbMonth.Validating
         cmbMonth.Select()
-        SendKeys.Send("{Enter}")
+        Call subCheckMonth()
     End Sub
 
-    '月ComboBoxの選択イベント
-    Private Sub ComboBox_month_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbMonth.SelectedValueChanged
+    ''' <summary>
+    ''' 月ComboBoxの選択イベント
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub cmbMonth_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbMonth.SelectedValueChanged
+
         'ComboBox有効性フラグチェック
         If Not mbooReady Then
             Return
         End If
 
         'カレンダー更新
-        subUpdateCalendar(subUpdateCalendar.SelectedValue, ComboBox_month.SelectedValue, 1)
+        Call subUpdateCalendar(Integer.Parse(cmbYear.SelectedValue.ToString), _
+                          Integer.Parse(cmbMonth.SelectedValue.ToString), _
+                          1)
+
     End Sub
 
 #End Region
 
 #Region "Button Event"
 
-    '前月ボタンイベント
-    Private Sub ButtonPre_Click(sender As Object, e As EventArgs) Handles ButtonPre.Click
+    ''' <summary>
+    ''' 次月の切り替え
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub subChangeToNextMonth()
+
         If cmbMonth.SelectedIndex <= 0 Then
             cmbMonth.SelectedIndex = cmbMonth.Items.Count - 1
             If cmbYear.SelectedIndex <= 0 Then
@@ -440,10 +565,25 @@ Public Class frmCalendar
         Else
             cmbMonth.SelectedIndex = cmbMonth.SelectedIndex - 1
         End If
+
     End Sub
 
-    '次月ボタンイベント
-    Private Sub ButtonNext_Click(sender As Object, e As EventArgs) Handles ButtonNext.Click
+    ''' <summary>
+    ''' 前月ボタンイベント
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub ButtonPre_Click(sender As Object, e As EventArgs) Handles ButtonPre.Click
+        Call subChangeToNextMonth()
+    End Sub
+
+    ''' <summary>
+    ''' 前月の切り替え
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub subChangeToPreMonth()
+
         If cmbMonth.SelectedIndex >= cmbMonth.Items.Count - 1 Then
             cmbMonth.SelectedIndex = 0
             If cmbYear.SelectedIndex >= cmbYear.Items.Count - 1 Then
@@ -454,29 +594,60 @@ Public Class frmCalendar
         Else
             cmbMonth.SelectedIndex = cmbMonth.SelectedIndex + 1
         End If
+
     End Sub
 
-    '今日ボタンイベント
+    ''' <summary>
+    ''' 次月ボタンイベント
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub ButtonNext_Click(sender As Object, e As EventArgs) Handles ButtonNext.Click
+        Call subChangeToPreMonth()
+    End Sub
+
+    ''' <summary>
+    ''' 今日ボタンイベント
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
     Private Sub ButtonToday_Click(sender As Object, e As EventArgs) Handles ButtonToday.Click
         Call subUpdateCalendarOfToday()
     End Sub
 
+    ''' <summary>
+    ''' 今日のカレンダー表示
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Sub subUpdateCalendarOfToday()
+
         '年月ComboBoxのデフォールト値設定
         Dim currentDate As Date = Now
-        subSetCmbYear(currentDate.Year)
-        subSetCmbMonth(currentDate.Month)
+        Call subSetCmbYear(currentDate.Year)
+        Call subSetCmbMonth(currentDate.Month)
+
         'カレンダー更新
-        subUpdateCalendar(currentDate.Year, currentDate.Month, currentDate.Day)
+        Call subUpdateCalendar(currentDate.Year, _
+                               currentDate.Month, _
+                               currentDate.Day)
+
     End Sub
 
-    '×ボタンのCauseValidation無効処理
+    ''' <summary>
+    ''' ×ボタンのCauseValidation無効化処理
+    ''' </summary>
+    ''' <param name="m">Windowsメッセージ</param>
+    ''' <remarks></remarks>
     Protected Overrides Sub WndProc(ByRef m As System.Windows.Forms.Message)
+
         Select Case ((m.WParam.ToInt64() And &HFFFF) And &HFFF0)
             Case &HF060 ' The user chose to close the form.
                 Me.AutoValidate = System.Windows.Forms.AutoValidate.Disable
         End Select
         MyBase.WndProc(m)
+
     End Sub
 
 #End Region

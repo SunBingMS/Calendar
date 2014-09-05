@@ -1,96 +1,166 @@
-﻿Imports System.Windows.Forms
+﻿'********************************************************************
+'  システム            ：   カレンダーシステム
+'  サブシステム名 　   ：   カレンダーメイン画面
+'  クラス名　　　      ：   frmCalendar
+'  機能概要　　　      ：   
+'  作成日      　　　　：   2014/09/05
+'  作成者      　　　　：   SKB 孫　氷
+'  変更履歴    　　　　：   
+'********************************************************************
+Option Strict On
+Option Explicit On
+Option Compare Binary
+
+Imports System.Windows.Forms
 Imports System.Data.OleDb
 
-
+''' <summary>
+''' メモダイアログ
+''' </summary>
+''' <remarks></remarks>
 Public Class frmMemo
 
-    ' Connection string for ADO.NET via OleDB
-    Dim odbcnConnection As OleDbConnection =
-        New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=memo.mdb;")
-    Dim odbcmdCommand As OleDbCommand
-    '年月日
-    Dim intYear As Integer
-    Dim intMonth As Integer
-    Dim intDay As Integer
-    'DBのメモ
-    Dim strMemoDB As String = ""
+    Dim mintYear As Integer = 0      '年
+    Dim mintMonth As Integer = 0     '月
+    Dim mintDay As Integer = 0       '日
 
-    'ダイアログの初期化
+    Dim mstrMemoDB As String = ""    'DBのメモ
 
-    Public Sub Initial(ByVal year As Integer, ByVal month As Integer, ByVal day As Integer)
+    ''' <summary>
+    ''' ダイアログの初期化
+    ''' </summary>
+    ''' <param name="pYear">年</param>
+    ''' <param name="pMonth">月</param>
+    ''' <param name="pDay">日</param>
+    ''' <remarks></remarks>
+    Public Sub subInitial(ByVal pYear As Integer, ByVal pMonth As Integer, ByVal pDay As Integer)
+
         '年月日
-        intYear = year
-        intMonth = month
-        intDay = day
+        mintYear = pYear
+        mintMonth = pMonth
+        mintDay = pDay
 
-        '当日のメモ内容を検索する
-        Me.Text = year & "年" & month & "月" & day & "日 -- メモ"
-        MemoContent.Text = ""
-        strMemoDB = ""
-        odbcnConnection.Open()
-        odbcmdCommand = New OleDbCommand()
-        odbcmdCommand.Connection = odbcnConnection
+        'ダイアログタイトルの設定
+        Me.Text = pYear & "年" & pMonth & "月" & pDay & "日 -- メモ"
+        rtbMemoContent.Text = ""
+        mstrMemoDB = ""
 
-        Dim tdate As String = String.Format("{0:0000}", year) & String.Format("{0:00}", month) & String.Format("{0:00}", day)
-        odbcmdCommand.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & tdate
-        Dim dr As OleDbDataReader = odbcmdCommand.ExecuteReader
+        Try
+            '当日のメモ内容を検索する
+            odbcnConnection.Open()
+            odbcmdCommand = New OleDbCommand()
+            odbcmdCommand.Connection = odbcnConnection
 
-        '検索結果があれば
-        If dr.HasRows Then
-            dr.Read()
-            'メモの表示
-            strMemoDB = String_Decode(dr(0))
-            MemoContent.Text = strMemoDB
+            Dim strDate As String = String.Format("{0:0000}", pYear) & _
+                                    String.Format("{0:00}", pMonth) & _
+                                    String.Format("{0:00}", pDay)
+            odbcmdCommand.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & strDate
 
-            dr.Close()
-        End If
-        odbcnConnection.Close()
+            'メモデータ取得()
+            Dim dr As OleDbDataReader = odbcmdCommand.ExecuteReader
+
+            '検索結果があれば
+            If dr.HasRows Then
+                dr.Read()
+                'メモの表示
+                mstrMemoDB = fncDecodeString(dr(0).ToString)
+                rtbMemoContent.Text = mstrMemoDB
+
+                dr.Close()
+            End If
+
+        Catch ex As Exception
+            MsgBox("DBロードエラー")
+        Finally
+            odbcnConnection.Close()
+        End Try
+
     End Sub
 
-    'メモの保存処理
-    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        odbcnConnection.Open()
-        '当日の古い内容を削除する
-        Dim tdate As String = String.Format("{0:0000}", intYear) & String.Format("{0:00}", intMonth) & String.Format("{0:00}", intDay)
-        odbcmdCommand.CommandText = "DELETE FROM tb_memo WHERE f_date =" & tdate
-        odbcmdCommand.ExecuteNonQuery()
-        If Not MemoContent.Text = "" Then
-            '当日の新メモを追加する
-            odbcmdCommand.CommandText = "INSERT INTO tb_memo VALUES('" & tdate & "','" & String_Encode(MemoContent.Text) & "')"
+    ''' <summary>
+    ''' メモの保存処理
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub btnOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOK.Click
+
+        Try
+            odbcnConnection.Open()
+            '当日の古い内容を削除する
+            Dim tdate As String = String.Format("{0:0000}", mintYear) & _
+                                  String.Format("{0:00}", mintMonth) & _
+                                  String.Format("{0:00}", mintDay)
+            odbcmdCommand.CommandText = "DELETE FROM tb_memo WHERE f_date =" & tdate
+
             odbcmdCommand.ExecuteNonQuery()
-        End If
-        odbcnConnection.Close()
-        frmCalendar.subUpdateCalendar(intYear, intMonth, intDay)
+            If Not rtbMemoContent.Text = "" Then
+                '当日の新メモを追加する
+                odbcmdCommand.CommandText = "INSERT INTO tb_memo VALUES('" & tdate & "','" & _
+                                            fncEncodeString(rtbMemoContent.Text) & "')"
+                odbcmdCommand.ExecuteNonQuery()
+            End If
+
+        Catch ex As Exception
+            MsgBox("DBロードエラー")
+        Finally
+            odbcnConnection.Close()
+        End Try
+
+        'カレンダー更新
+        frmCalendar.subUpdateCalendar(mintYear, _
+                                      mintMonth, _
+                                      mintDay)
+
+        'ダイアログ閉じる
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
+
     End Sub
 
-    'キャンセル処理
-    Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
-        If Not strMemoDB = MemoContent.Text Then
-            Dim result As DialogResult = MessageBox.Show("メモの編集がありますが、保存しますか？", _
+    ''' <summary>
+    ''' キャンセル処理
+    ''' </summary>
+    ''' <param name="sender">イベント発生源オブジェクト</param>
+    ''' <param name="e">イベントに関連する補足情報</param>
+    ''' <remarks></remarks>
+    Private Sub btnCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCancel.Click
+        If Not mstrMemoDB = rtbMemoContent.Text Then
+            Dim drResult As DialogResult = MessageBox.Show("メモの編集がありますが、保存しますか？", _
                                              "質問", _
                                              MessageBoxButtons.YesNo, _
                                              MessageBoxIcon.Exclamation, _
                                              MessageBoxDefaultButton.Button1)
+
             '何が選択されたか調べる 
-            If result = DialogResult.Yes Then
+            If drResult = DialogResult.Yes Then
                 '「はい」が選択された時 
-                OK_Button_Click(sender, New System.EventArgs())
+                btnOK_Click(sender, New System.EventArgs())
             End If
         End If
 
+        'ダイアログ閉じる
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub
 
-    'エンコード
-    Private Function String_Encode(input As String) As String
+    ''' <summary>
+    ''' エンコード
+    ''' </summary>
+    ''' <param name="input">エンコード前の文字列</param>
+    ''' <returns>エンコード後の文字列</returns>
+    ''' <remarks></remarks>
+    Private Function fncEncodeString(input As String) As String
         Return input.Replace("'", "['']")
     End Function
 
-    'ディコード
-    Private Function String_Decode(input As String) As String
+    ''' <summary>
+    ''' ディコード
+    ''' </summary>
+    ''' <param name="input">ディコード前の文字列</param>
+    ''' <returns>ディコード後の文字列</returns>
+    ''' <remarks></remarks>
+    Private Function fncDecodeString(input As String) As String
         Return input.Replace("[']", "'")
     End Function
 
