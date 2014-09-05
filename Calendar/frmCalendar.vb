@@ -358,8 +358,8 @@ Public Class frmCalendar
             End If
 
             'セルの選択
-            For x = 0 To 6
-                For y = 0 To 5
+            For x As Integer = 0 To 6
+                For y As Integer = 0 To 5
                     If dgvCalendar.Item(x, y).Value.Equals(strSelectDay) And
                        Not dgvCalendar.Item(x, y).Style.ForeColor = Color.Gray Then
                         dgvCalendar.Item(x, y).Selected = True
