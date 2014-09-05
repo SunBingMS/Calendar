@@ -35,6 +35,18 @@ Public Class frmCalendar
 
         Debug.WriteLine("カレンダー初期化開始")
 
+        Try
+
+            godbcnConnection.Open()
+
+        Catch ex As Exception
+
+            MsgBox("DBオープンエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
+
+        End Try
+
+
+
         'カレンダーセルのサイズ設定
         dgvCalendar.RowTemplate.Height = 50
 
@@ -244,8 +256,7 @@ Public Class frmCalendar
 
         '今月情報をカレンダーへ出力
         Try
-            'DBオープン
-            godbcnConnection.Open()
+            godbcmdCommand = New OleDbCommand()
             godbcmdCommand.Connection = godbcnConnection
 
             For i As Integer = 1 To lngDaysOfMonth
@@ -282,9 +293,13 @@ Public Class frmCalendar
             Next
 
         Catch ex As Exception
-            MsgBox("DBロードエラー。\n「" & gstrDBName & "」を確認してください。")
+
+            MsgBox("DBロードエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
+
         Finally
-            godbcnConnection.Close()
+
+            godbcmdCommand.Dispose()
+
         End Try
 
         Debug.WriteLine("本月の作成終了")
@@ -716,6 +731,16 @@ Public Class frmCalendar
         Select Case ((m.WParam.ToInt64() And &HFFFF) And &HFFF0)
             Case &HF060 ' The user chose to close the form.
                 Me.AutoValidate = System.Windows.Forms.AutoValidate.Disable
+
+                Try
+
+                    godbcnConnection.Close()
+
+                Catch ex As Exception
+
+                    MsgBox("DBクローズエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
+
+                End Try
         End Select
         MyBase.WndProc(m)
 

@@ -20,7 +20,7 @@ Module basModule
     'データベースアクセス関連
     Public godbcnConnection As New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & _
                                                   gstrDBName & ";")
-    Public godbcmdCommand As New OleDbCommand
+    Public godbcmdCommand As OleDbCommand
 
     Public godbtTransaction As OleDbTransaction
 

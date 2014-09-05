@@ -49,7 +49,6 @@ Public Class frmMemo
 
         Try
             '当日のメモ内容を検索する
-            godbcnConnection.Open()
             godbcmdCommand = New OleDbCommand()
             godbcmdCommand.Connection = godbcnConnection
 
@@ -75,13 +74,13 @@ Public Class frmMemo
 
         Catch ex As Exception
 
-            MsgBox("DBロードエラー。\n「" & gstrDBName & "」を確認してください。")
+            MsgBox("DBロードエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
 
             Debug.WriteLine("DBアクセスエラー")
 
         Finally
 
-            godbcnConnection.Close()
+            godbcmdCommand.Dispose()
 
             Debug.WriteLine("メモダイアログ初期化終了")
 
@@ -100,8 +99,6 @@ Public Class frmMemo
         Debug.WriteLine("メモダイアログ保存開始")
 
         Try
-            godbcnConnection.Open()
-
             'Transaction開始
             godbtTransaction = godbcnConnection.BeginTransaction()
 
@@ -109,6 +106,9 @@ Public Class frmMemo
             Dim tdate As String = String.Format("{0:0000}", mintYear) & _
                                   String.Format("{0:00}", mintMonth) & _
                                   String.Format("{0:00}", mintDay)
+
+            godbcmdCommand = New OleDbCommand()
+            godbcmdCommand.Connection = godbcnConnection
             godbcmdCommand.CommandText = "DELETE FROM tb_memo WHERE f_date =" & tdate
             godbcmdCommand.Transaction = godbtTransaction
             godbcmdCommand.ExecuteNonQuery()
@@ -130,13 +130,13 @@ Public Class frmMemo
 
             godbtTransaction.Rollback()
 
-            MsgBox("DBロードエラー。\n「" & gstrDBName & "」を確認してください。")
+            MsgBox("DBロードエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
 
             Debug.WriteLine("DBアクセスエラー")
 
         Finally
 
-            godbcnConnection.Close()
+            godbcmdCommand.Dispose()
 
             Debug.WriteLine("メモダイアログ保存終了")
 
