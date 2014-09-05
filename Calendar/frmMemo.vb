@@ -76,7 +76,7 @@ Public Class frmMemo
 
             MsgBox("DBロードエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
 
-            Debug.WriteLine("DBアクセスエラー")
+            Debug.WriteLine("DBロードエラー")
 
         Finally
 
@@ -130,9 +130,9 @@ Public Class frmMemo
 
             godbtTransaction.Rollback()
 
-            MsgBox("DBロードエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
+            MsgBox("DB書込エラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
 
-            Debug.WriteLine("DBアクセスエラー")
+            Debug.WriteLine("DB書込エラー")
 
         Finally
 

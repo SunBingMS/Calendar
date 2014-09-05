@@ -35,6 +35,7 @@ Public Class frmCalendar
 
         Debug.WriteLine("カレンダー初期化開始")
 
+        'DBオープン
         Try
 
             godbcnConnection.Open()
@@ -43,9 +44,9 @@ Public Class frmCalendar
 
             MsgBox("DBオープンエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
 
+            Debug.WriteLine("DBオープンエラー")
+
         End Try
-
-
 
         'カレンダーセルのサイズ設定
         dgvCalendar.RowTemplate.Height = 50
@@ -295,6 +296,8 @@ Public Class frmCalendar
         Catch ex As Exception
 
             MsgBox("DBロードエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
+
+            Debug.WriteLine("DBロードエラー")
 
         Finally
 
@@ -729,9 +732,10 @@ Public Class frmCalendar
     Protected Overrides Sub WndProc(ByRef m As System.Windows.Forms.Message)
 
         Select Case ((m.WParam.ToInt64() And &HFFFF) And &HFFF0)
-            Case &HF060 ' The user chose to close the form.
+            Case &HF060 'バツボタン
                 Me.AutoValidate = System.Windows.Forms.AutoValidate.Disable
 
+                'DBクローズ
                 Try
 
                     godbcnConnection.Close()
@@ -740,7 +744,10 @@ Public Class frmCalendar
 
                     MsgBox("DBクローズエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
 
+                    Debug.WriteLine("DBクローズエラー")
+
                 End Try
+
         End Select
         MyBase.WndProc(m)
 
