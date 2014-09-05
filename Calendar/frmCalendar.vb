@@ -354,6 +354,7 @@ Public Class frmCalendar
                             Integer.Parse(dgvCalendar.SelectedCells.Item(0).Value.ToString))
 
             'メモダイアログの表示
+            frmMemo.rtbMemoContent.Select()
             Call frmMemo.ShowDialog()
 
             Debug.WriteLine("本月のセルをクリックした")

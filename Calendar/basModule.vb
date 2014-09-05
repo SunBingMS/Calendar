@@ -22,4 +22,6 @@ Module basModule
                                                   gstrDBName & ";")
     Public godbcmdCommand As New OleDbCommand
 
+    Public godbtTransaction As OleDbTransaction
+
 End Module

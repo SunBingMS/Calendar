@@ -102,14 +102,17 @@ Public Class frmMemo
         Try
             godbcnConnection.Open()
 
+            'Transaction開始
+            godbtTransaction = godbcnConnection.BeginTransaction()
+
             '当日の古い内容を削除する
             Dim tdate As String = String.Format("{0:0000}", mintYear) & _
                                   String.Format("{0:00}", mintMonth) & _
                                   String.Format("{0:00}", mintDay)
             godbcmdCommand.CommandText = "DELETE FROM tb_memo WHERE f_date =" & tdate
+            godbcmdCommand.Transaction = godbtTransaction
             godbcmdCommand.ExecuteNonQuery()
             Debug.WriteLine("メモレコーダー削除")
-
 
             If Not rtbMemoContent.Text = "" Then
 
@@ -121,7 +124,11 @@ Public Class frmMemo
 
             End If
 
+            godbtTransaction.Commit()
+
         Catch ex As Exception
+
+            godbtTransaction.Rollback()
 
             MsgBox("DBロードエラー。\n「" & gstrDBName & "」を確認してください。")
 
