@@ -1,7 +1,7 @@
 ﻿'********************************************************************
 '  システム            ：   カレンダーシステム
-'  サブシステム名 　   ：   カレンダーメイン画面
-'  クラス名　　　      ：   frmCalendar
+'  サブシステム名 　   ：   メモ表示ダイアログ
+'  クラス名　　　      ：   frmMemo
 '  機能概要　　　      ：   
 '  作成日      　　　　：   2014/09/05
 '  作成者      　　　　：   SKB 孫　氷
@@ -35,6 +35,8 @@ Public Class frmMemo
     ''' <remarks></remarks>
     Public Sub subInitial(ByVal pYear As Integer, ByVal pMonth As Integer, ByVal pDay As Integer)
 
+        Debug.WriteLine("メモダイアログ初期化開始：" & pYear & "年" & pMonth & "月" & pDay & "日")
+
         '年月日
         mintYear = pYear
         mintMonth = pMonth
@@ -47,17 +49,17 @@ Public Class frmMemo
 
         Try
             '当日のメモ内容を検索する
-            odbcnConnection.Open()
-            odbcmdCommand = New OleDbCommand()
-            odbcmdCommand.Connection = odbcnConnection
+            godbcnConnection.Open()
+            godbcmdCommand = New OleDbCommand()
+            godbcmdCommand.Connection = godbcnConnection
 
             Dim strDate As String = String.Format("{0:0000}", pYear) & _
                                     String.Format("{0:00}", pMonth) & _
                                     String.Format("{0:00}", pDay)
-            odbcmdCommand.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & strDate
+            godbcmdCommand.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & strDate
 
             'メモデータ取得()
-            Dim dr As OleDbDataReader = odbcmdCommand.ExecuteReader
+            Dim dr As OleDbDataReader = godbcmdCommand.ExecuteReader
 
             '検索結果があれば
             If dr.HasRows Then
@@ -66,13 +68,23 @@ Public Class frmMemo
                 mstrMemoDB = fncDecodeString(dr(0).ToString)
                 rtbMemoContent.Text = mstrMemoDB
 
+                Debug.WriteLine("メモ取得")
+
                 dr.Close()
             End If
 
         Catch ex As Exception
-            MsgBox("DBロードエラー")
+
+            MsgBox("DBロードエラー。\n「" & gstrDBName & "」を確認してください。")
+
+            Debug.WriteLine("DBアクセスエラー")
+
         Finally
-            odbcnConnection.Close()
+
+            godbcnConnection.Close()
+
+            Debug.WriteLine("メモダイアログ初期化終了")
+
         End Try
 
     End Sub
@@ -85,26 +97,42 @@ Public Class frmMemo
     ''' <remarks></remarks>
     Private Sub btnOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOK.Click
 
+        Debug.WriteLine("メモダイアログ保存開始")
+
         Try
-            odbcnConnection.Open()
+            godbcnConnection.Open()
+
             '当日の古い内容を削除する
             Dim tdate As String = String.Format("{0:0000}", mintYear) & _
                                   String.Format("{0:00}", mintMonth) & _
                                   String.Format("{0:00}", mintDay)
-            odbcmdCommand.CommandText = "DELETE FROM tb_memo WHERE f_date =" & tdate
+            godbcmdCommand.CommandText = "DELETE FROM tb_memo WHERE f_date =" & tdate
+            godbcmdCommand.ExecuteNonQuery()
+            Debug.WriteLine("メモレコーダー削除")
 
-            odbcmdCommand.ExecuteNonQuery()
+
             If Not rtbMemoContent.Text = "" Then
+
                 '当日の新メモを追加する
-                odbcmdCommand.CommandText = "INSERT INTO tb_memo VALUES('" & tdate & "','" & _
+                godbcmdCommand.CommandText = "INSERT INTO tb_memo VALUES('" & tdate & "','" & _
                                             fncEncodeString(rtbMemoContent.Text) & "')"
-                odbcmdCommand.ExecuteNonQuery()
+                godbcmdCommand.ExecuteNonQuery()
+                Debug.WriteLine("メモレコーダー追加")
+
             End If
 
         Catch ex As Exception
-            MsgBox("DBロードエラー")
+
+            MsgBox("DBロードエラー。\n「" & gstrDBName & "」を確認してください。")
+
+            Debug.WriteLine("DBアクセスエラー")
+
         Finally
-            odbcnConnection.Close()
+
+            godbcnConnection.Close()
+
+            Debug.WriteLine("メモダイアログ保存終了")
+
         End Try
 
         'カレンダー更新
@@ -151,7 +179,11 @@ Public Class frmMemo
     ''' <returns>エンコード後の文字列</returns>
     ''' <remarks></remarks>
     Private Function fncEncodeString(input As String) As String
+
+        Debug.WriteLine("メモ内容のエンコード")
+
         Return input.Replace("'", "['']")
+
     End Function
 
     ''' <summary>
@@ -161,7 +193,11 @@ Public Class frmMemo
     ''' <returns>ディコード後の文字列</returns>
     ''' <remarks></remarks>
     Private Function fncDecodeString(input As String) As String
+
+        Debug.WriteLine("メモ内容のディコード")
+
         Return input.Replace("[']", "'")
+
     End Function
 
 End Class

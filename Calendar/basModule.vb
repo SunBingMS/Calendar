@@ -1,9 +1,25 @@
-﻿Imports System.Data.OleDb
+﻿'********************************************************************
+'  システム            ：   カレンダーシステム
+'  サブシステム名 　   ：   DB共通
+'  クラス名　　　      ：   basModule
+'  機能概要　　　      ：   
+'  作成日      　　　　：   2014/09/05
+'  作成者      　　　　：   SKB 孫　氷
+'  変更履歴    　　　　：   
+'********************************************************************
+Option Strict On
+Option Explicit On
+Option Compare Binary
+
+Imports System.Data.OleDb
 
 Module basModule
 
+    Public ReadOnly gstrDBName As String = "memo.mdb"
+
     'データベースアクセス関連
-    Public odbcnConnection As New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=memo.mdb;")
-    Public odbcmdCommand As New OleDbCommand
+    Public godbcnConnection As New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & _
+                                                  gstrDBName & ";")
+    Public godbcmdCommand As New OleDbCommand
 
 End Module

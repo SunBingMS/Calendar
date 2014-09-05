@@ -33,6 +33,8 @@ Public Class frmCalendar
     ''' <remarks></remarks>
     Private Sub Calendar_Load(sender As Object, e As EventArgs) Handles Me.Load
 
+        Debug.WriteLine("カレンダー初期化開始")
+
         'カレンダーセルのサイズ設定
         dgvCalendar.RowTemplate.Height = 50
 
@@ -51,6 +53,8 @@ Public Class frmCalendar
         'ComboBox有効にする
         mbooReady = True
 
+        Debug.WriteLine("カレンダー初期化終了")
+
     End Sub
 
 #End Region
@@ -62,6 +66,8 @@ Public Class frmCalendar
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub subInitialCmbYear()
+
+        Debug.WriteLine("年ComboBox初期化開始")
 
         '年ComboBoxのクリア
         cmbYear.Items.Clear()
@@ -81,6 +87,8 @@ Public Class frmCalendar
         cmbYear.ValueMember = "VALUE"
         cmbYear.DisplayMember = "TEXT"
 
+        Debug.WriteLine("年ComboBox初期化終了")
+
     End Sub
 
     ''' <summary>
@@ -88,6 +96,8 @@ Public Class frmCalendar
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub subInitialCmbMonth()
+
+        Debug.WriteLine("月ComboBox初期化開始")
 
         '月ComboBoxのクリア
         cmbMonth.Items.Clear()
@@ -107,6 +117,8 @@ Public Class frmCalendar
         cmbMonth.ValueMember = "VALUE"
         cmbMonth.DisplayMember = "TEXT"
 
+        Debug.WriteLine("月ComboBox初期化開始")
+
     End Sub
 
     ''' <summary>
@@ -115,6 +127,8 @@ Public Class frmCalendar
     ''' <param name="pYear">設定したい年</param>
     ''' <remarks></remarks>
     Private Sub subSetCmbYear(ByVal pYear As Integer)
+
+        Debug.WriteLine("年ComboBox設定：" & pYear)
 
         cmbYear.SelectedValue = pYear
 
@@ -126,6 +140,8 @@ Public Class frmCalendar
     ''' <param name="pMonth">設定したい月</param>
     ''' <remarks></remarks>
     Private Sub subSetCmbMonth(pMonth As Integer)
+
+        Debug.WriteLine("月ComboBox設定:" & pMonth)
 
         cmbMonth.SelectedValue = pMonth
 
@@ -159,6 +175,9 @@ Public Class frmCalendar
                                       Str(pYear + 1) + "-" + Str((pMonth + 1) Mod 12) & "-1")
         End If
 
+        Debug.WriteLine(pYear & "年" & pMonth & "月の日数算出:" & _
+                        CType(lngDaysOfMonth, Integer))
+
         Return CType(lngDaysOfMonth, Integer)
 
     End Function
@@ -175,6 +194,8 @@ Public Class frmCalendar
     ''' <param name="pDay"></param>
     ''' <remarks></remarks>
     Public Sub subUpdateCalendar(ByVal pYear As Integer, ByVal pMonth As Integer, ByVal pDay As Integer)
+
+        Debug.WriteLine("カレンダー作成：" & pYear & "年" & pMonth & "月" & pDay & "日")
 
         'メンバー変数年月の設定
         mintLastCorrectYear = pYear
@@ -224,8 +245,8 @@ Public Class frmCalendar
         '今月情報をカレンダーへ出力
         Try
             'DBオープン
-            odbcnConnection.Open()
-            odbcmdCommand.Connection = odbcnConnection
+            godbcnConnection.Open()
+            godbcmdCommand.Connection = godbcnConnection
 
             For i As Integer = 1 To lngDaysOfMonth
 
@@ -244,10 +265,10 @@ Public Class frmCalendar
                 Dim strDate As String = String.Format("{0:0000}", pYear) & _
                                         String.Format("{0:00}", pMonth) & _
                                         String.Format("{0:00}", i)
-                odbcmdCommand.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & strDate
+                godbcmdCommand.CommandText = "SELECT f_memo FROM tb_memo WHERE f_date =" & strDate
 
                 '当日のメモデータ取得
-                Dim odbDataReader As OleDbDataReader = odbcmdCommand.ExecuteReader
+                Dim odbDataReader As OleDbDataReader = godbcmdCommand.ExecuteReader
                 If odbDataReader.HasRows Then
                     odbDataReader.Read()
                     '当日のメモは非空の場合
@@ -261,10 +282,12 @@ Public Class frmCalendar
             Next
 
         Catch ex As Exception
-            MsgBox("DBロードエラー")
+            MsgBox("DBロードエラー。\n「" & gstrDBName & "」を確認してください。")
         Finally
-            odbcnConnection.Close()
+            godbcnConnection.Close()
         End Try
+
+        Debug.WriteLine("本月の作成終了")
 
         '前月情報をカレンダーへ出力
         For i As Integer = 0 To intMonthStartWeek - 2
@@ -273,12 +296,16 @@ Public Class frmCalendar
             dgvCalendar.Item(i, 0).Value = intDaysOfPreMonth - intMonthStartWeek + 2 + i
         Next
 
+        Debug.WriteLine("前月の作成終了")
+
         '次月情報をカレンダーへ出力
         For i As Integer = intMonthStartWeek + lngDaysOfMonth To 6 * 7
             dgvCalendar.Item((i - 1) Mod 7, (i - 1) \ 7).Style.ForeColor = Color.Gray
             dgvCalendar.Item((i - 1) Mod 7, (i - 1) \ 7).Style.BackColor = Color.FromArgb(240, 240, 240)
             dgvCalendar.Item((i - 1) Mod 7, (i - 1) \ 7).Value = i - intMonthStartWeek - lngDaysOfMonth + 1
         Next
+
+        Debug.WriteLine("次月の作成終了")
 
     End Sub
 
@@ -295,11 +322,19 @@ Public Class frmCalendar
             '選択対象は今月ではない場合
             Dim strSelectDay As String = dgvCalendar.SelectedCells.Item(0).Value.ToString
             If dgvCalendar.SelectedCells.Item(0).RowIndex >= 4 Then
+
                 '次月の場合
                 Call subChangeToNextMonth()
+
+                Debug.WriteLine("次月のセルをクリックした")
+
             Else
+
                 '前月の場合
                 Call subChangeToPreMonth()
+
+                Debug.WriteLine("前月のセルをクリックした")
+
             End If
 
             'セルの選択
@@ -320,6 +355,9 @@ Public Class frmCalendar
 
             'メモダイアログの表示
             Call frmMemo.ShowDialog()
+
+            Debug.WriteLine("本月のセルをクリックした")
+
         End If
 
     End Sub
@@ -367,6 +405,8 @@ Public Class frmCalendar
                 cmbMonth.Select()
                 cmbYear.CausesValidation = True
 
+                Debug.WriteLine("年のチェックOK")
+
                 Return
             End If
         End If
@@ -375,6 +415,8 @@ Public Class frmCalendar
 
         '入力前の日付表示
         Call subSetCmbYear(mintLastCorrectYear)
+
+        Debug.WriteLine("年のチェックNG")
 
     End Sub
 
@@ -419,8 +461,12 @@ Public Class frmCalendar
     ''' <param name="e">イベントに関連する補足情報</param>
     ''' <remarks></remarks>
     Private Sub cmbYear_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmbYear.Validating
+
+        Debug.WriteLine("年ComboBoxのValidating発生")
+
         cmbYear.Select()
         Call subCheckYear()
+
     End Sub
 
     ''' <summary>
@@ -430,6 +476,8 @@ Public Class frmCalendar
     ''' <param name="e">イベントに関連する補足情報</param>
     ''' <remarks></remarks>
     Private Sub cmbYear_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbYear.SelectedValueChanged
+
+        Debug.WriteLine("年ComboBoxの値変換発生")
 
         'ComboBox有効性フラグチェック
         If Not mbooReady Then
@@ -469,6 +517,8 @@ Public Class frmCalendar
                 ButtonToday.Select()
                 cmbMonth.CausesValidation = True
 
+                Debug.WriteLine("月のチェックOK")
+
                 Return
             End If
         End If
@@ -477,6 +527,8 @@ Public Class frmCalendar
 
         '入力前の日付表示
         Call subSetCmbMonth(mintLastCorrectMonth)
+
+        Debug.WriteLine("月のチェックNG")
 
     End Sub
 
@@ -521,8 +573,12 @@ Public Class frmCalendar
     ''' <param name="e">イベントに関連する補足情報</param>
     ''' <remarks></remarks>
     Private Sub cmbMonth_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles cmbMonth.Validating
+
+        Debug.WriteLine("月ComboBoxのValidating発生")
+
         cmbMonth.Select()
         Call subCheckMonth()
+
     End Sub
 
     ''' <summary>
@@ -532,6 +588,8 @@ Public Class frmCalendar
     ''' <param name="e">イベントに関連する補足情報</param>
     ''' <remarks></remarks>
     Private Sub cmbMonth_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbMonth.SelectedValueChanged
+
+        Debug.WriteLine("月ComboBoxの値変換発生")
 
         'ComboBox有効性フラグチェック
         If Not mbooReady Then
@@ -575,7 +633,11 @@ Public Class frmCalendar
     ''' <param name="e">イベントに関連する補足情報</param>
     ''' <remarks></remarks>
     Private Sub ButtonPre_Click(sender As Object, e As EventArgs) Handles ButtonPre.Click
+
+        Debug.WriteLine("前月ボタンクリック")
+
         Call subChangeToNextMonth()
+
     End Sub
 
     ''' <summary>
@@ -604,7 +666,11 @@ Public Class frmCalendar
     ''' <param name="e">イベントに関連する補足情報</param>
     ''' <remarks></remarks>
     Private Sub ButtonNext_Click(sender As Object, e As EventArgs) Handles ButtonNext.Click
+
+        Debug.WriteLine("次月ボタンクリック")
+
         Call subChangeToPreMonth()
+
     End Sub
 
     ''' <summary>
@@ -614,7 +680,11 @@ Public Class frmCalendar
     ''' <param name="e">イベントに関連する補足情報</param>
     ''' <remarks></remarks>
     Private Sub ButtonToday_Click(sender As Object, e As EventArgs) Handles ButtonToday.Click
+
+        Debug.WriteLine("今日ボタンクリック")
+
         Call subUpdateCalendarOfToday()
+
     End Sub
 
     ''' <summary>
