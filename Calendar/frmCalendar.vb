@@ -42,9 +42,11 @@ Public Class frmCalendar
 
         Catch ex As Exception
 
-            MsgBox("DBオープンエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
+            MsgBox("DBオープンエラー。" & vbNewLine & "「" & grstrDBName & "」を確認してから、再度起動してください。")
 
             Debug.WriteLine("DBオープンエラー")
+
+            Me.Close()
 
         End Try
 
@@ -295,7 +297,7 @@ Public Class frmCalendar
 
         Catch ex As Exception
 
-            MsgBox("DBロードエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
+            MsgBox("DBロードエラー。" & vbNewLine & "「" & grstrDBName & "」を確認してください。")
 
             Debug.WriteLine("DBロードエラー")
 
@@ -742,13 +744,14 @@ Public Class frmCalendar
 
                 Catch ex As Exception
 
-                    MsgBox("DBクローズエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
+                    MsgBox("DBクローズエラー。" & vbNewLine & "「" & grstrDBName & "」を確認してください。")
 
                     Debug.WriteLine("DBクローズエラー")
 
                 End Try
 
         End Select
+
         MyBase.WndProc(m)
 
     End Sub

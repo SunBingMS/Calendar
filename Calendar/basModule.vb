@@ -15,11 +15,11 @@ Imports System.Data.OleDb
 
 Module basModule
 
-    Public ReadOnly gstrDBName As String = "memo.mdb"
+    Public ReadOnly grstrDBName As String = "memo.mdb"
 
     'データベースアクセス関連
     Public godbcnConnection As New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & _
-                                                  gstrDBName & ";")
+                                                  grstrDBName & ";")
     Public godbcmdCommand As OleDbCommand
 
     Public godbtTransaction As OleDbTransaction

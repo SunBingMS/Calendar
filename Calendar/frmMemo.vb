@@ -23,7 +23,6 @@ Public Class frmMemo
     Dim mintYear As Integer = 0      '年
     Dim mintMonth As Integer = 0     '月
     Dim mintDay As Integer = 0       '日
-
     Dim mstrMemoDB As String = ""    'DBのメモ
 
     ''' <summary>
@@ -74,7 +73,7 @@ Public Class frmMemo
 
         Catch ex As Exception
 
-            MsgBox("DBロードエラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
+            MsgBox("DBロードエラー。" & vbNewLine & "「" & grstrDBName & "」を確認してください。")
 
             Debug.WriteLine("DBロードエラー")
 
@@ -130,7 +129,7 @@ Public Class frmMemo
 
             godbtTransaction.Rollback()
 
-            MsgBox("DB書込エラー。" & vbNewLine & "「" & gstrDBName & "」を確認してください。")
+            MsgBox("DB書込エラー。" & vbNewLine & "「" & grstrDBName & "」を確認してください。")
 
             Debug.WriteLine("DB書込エラー")
 
